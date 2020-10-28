@@ -12,7 +12,7 @@
                 maxlength="11"
                 placeholder="学号"></wInput>
         <wInput v-model="Password"
-                type="password" 
+                type="password"
                 maxlength="11"
                 placeholder="密码"></wInput>
       </view>
