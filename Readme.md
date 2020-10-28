@@ -6,7 +6,7 @@ git config --global user.name "你的昵称"
 git config --global user.email "邮箱地址"
 ```
 
-#### 1.拉取远程项目 -
+#### 1.拉取远程项目
 ```sh
 git clone 自己到仓库地址
 ```
