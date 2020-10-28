@@ -1,6 +1,3 @@
-## 介绍
-考试君 - 学生端uniapp项目代码 
-
 ## Git 协作流程
 > Git全局配置（必须）
 
@@ -11,7 +8,7 @@ git config --global user.email "邮箱地址"
 
 #### 1.拉取远程项目
 ```sh
-git clone https://gitee.com/pig0224/ExamKing-app.git
+git clone 自己到仓库地址
 ```
 #### 2.拉取devlop分支到本地，并切换到此分区
 ```sh
@@ -31,17 +28,32 @@ git checkout feature-pig224-v0.0.1
 
 > ⚠️ 注意：代码开发不要有冲突，尽量不要删除别人的文件。规范创建自己的文件及文件夹。
 
-#### 5. Pull Request（代码开发完请求合并代码）
+#### 5.提交代码
+```sh
+# 提交代码到暂存区
+git add .
+# 提交代码到本地分支仓库
+git commit -m "提交说明"
+```
+
+#### 6. 推送代码
 ```sh
 # 切换到develop分支
 git checkout develop
 
 # 更新远程develop分支到本地develop分支
-git pull origin/develop
+git pull origin develop
 
 # 合并本地feature分支到本地develop分支
 git merge feature-pig224-v0.0.1
+
+# 推送代码到远程仓库
+git push origin develop
 ```
+
+#### 7. Pull Request
+
+> Gitee后台请求Pull Request到主要仓库
 
 ## Git 常用命令
 
