@@ -36,7 +36,16 @@
 				"enablePullDownRefresh": false
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/information/information",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#0081ff",
 		"navigationBarTitleText": "考试君",
