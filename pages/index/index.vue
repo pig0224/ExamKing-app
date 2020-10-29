@@ -330,13 +330,12 @@ export default {
 }
 .exam-list {
   width: 632rpx;
-  height: 280rpx;
   display: flex;
   justify-content: space-between;
   margin-top: 30rpx;
   flex-wrap: wrap;
   .exambg {
-    width: 300rpx;
+    width: 100%;
     height: 130rpx;
     border-radius: 16rpx;
     position: absolute;
@@ -344,7 +343,7 @@ export default {
     left: 0;
     top: 0;
     image {
-      width: 300rpx;
+      width: 100%;
       height: 130rpx;
       border-radius: 16rpx;
       z-index: -1;
@@ -358,7 +357,8 @@ export default {
   }
   .exam-item {
     padding: 20rpx 16rpx;
-    width: 300rpx;
+    flex: 1;
+    // width: 300rpx;
     height: 130rpx;
     border-radius: 16rpx;
     position: relative;
