@@ -1,54 +1,57 @@
 {
-	"pages": [{
-			// "path": "pages/index/index",
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			// "path": "pages/login/login",
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/error/error",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/register/register",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/forget/forget",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarBackgroundColor": "#0081ff",
-		"navigationBarTitleText": "考试君",
-		"navigationStyle": "custom",
-		"navigationBarTextStyle": "black"
-	},
-	"usingComponts": true,
-	"easycom": {
-		// 下载安装的方式需要前面的"@/"，npm安装的方式无需"@/"
-		// 下载安装方式
-		"^u-(.*)": "@/plugins/uview-ui/components/u-$1/u-$1.vue"
-		// npm安装方式
-		// "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
-	}
+  "pages": [
+    {
+      "path": "pages/index/index",
+      // "path": "pages/login/login",
+      "style": {
+        "disableScroll": true,
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/login/login",
+      // "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/error/error",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/register/register",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/forget/forget",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "考试君",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fbf6ff"
+  },
+  "usingComponts": true,
+  "easycom": {
+    // 下载安装的方式需要前面的"@/"，npm安装的方式无需"@/"
+    // 下载安装方式
+    "^u-(.*)": "@/plugins/uview-ui/components/u-$1/u-$1.vue"
+    // npm安装方式
+    // "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+  }
 }

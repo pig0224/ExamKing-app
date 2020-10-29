@@ -1,19 +1,567 @@
 <template>
-	<view>
-		hello 
-	</view>
+  <view id="index-content">
+    <scroll-view scroll-y
+                 class="DrawerPage"
+                 :class="modalName=='viewModal'?'show':''">
+      <view class="content">
+        <!-- 头部 -->
+        <view class="header"
+              :class="modalName=='viewModal'?'hide':''">
+          <view class="headimg"
+                @tap="showModal"
+                data-target="viewModal">
+            <image src="../../static/timg.jpg"
+                   mode="heightFix"></image>
+          </view>
+          <text class="nickname">辣条老板</text>
+        </view>
+        <!-- 搜索 -->
+        <view class="search">
+          <input type="text"
+                 placeholder="请输入课程关键词">
+          <image src="../../static/search@2x.png"
+                 mode="widthFix"></image>
+        </view>
+        <!-- 轮播 -->
+        <swiper class="banner">
+          <swiper-item class="item">
+            <image src="../../static/banner.jpg"
+                   mode="heightFix">
+          </swiper-item>
+        </swiper>
+        <!-- 错题集 -->
+        <view class="cuoti">
+          <view class="item">
+            <view class="item-top">
+              <view class="cuoti-num ellipse-line">
+                <text>99</text>
+              </view>
+              <view class="right">
+                <image src="../../static/you@2x.png"
+                       mode="widthFix" />
+              </view>
+            </view>
+            <view class="item-bottom">
+              <view class="bottom-txt">
+                <text>总错题集</text>
+              </view>
+            </view>
+          </view>
+          <view style="width:50rpx;"></view>
+          <view class="item">
+            <view class="item-top">
+              <view class="cuoti-num ellipse-line">
+                <text>66</text>
+              </view>
+              <view class="right">
+                <image src="../../static/you@2x.png"
+                       mode="widthFix" />
+              </view>
+            </view>
+            <view class="item-bottom">
+              <view class="bottom-txt">
+                <text>今日错题</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 考试课程 -->
+        <view class="cell-title">
+          <view class="left-block"></view>
+          <text class="title">
+            考试课程
+          </text>
+          <text class="more">更多</text>
+        </view>
+
+        <view class="exam-list">
+          <view class="exam-item">
+            <view class="exam-title">
+
+            </view>
+          </view>
+        </view>
+
+        <!-- 今日成绩 -->
+        <view class="cell-title">
+          <view class="left-block"></view>
+          <text class="title">
+            今日成绩
+          </text>
+          <text class="more">更多</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="DrawerClose"
+          :class="modalName=='viewModal'?'show':''"
+          @tap="hideModal">
+      <!-- <text class="cuIcon-pullright footer-block"></text> -->
+      <view class="footer-block close-block"></view>
+    </view>
+
+    <!-- 侧边栏 -->
+    <scroll-view scroll-y
+                 class="DrawerWindow"
+                 :class="modalName=='viewModal'?'show':''">
+      <view class="left-content">
+        <!-- 头部 -->
+        <view class="header left-header"
+              :class="modalName=='viewModal'?'':'hide'">
+          <view class="headimg"
+                @tap="showModal"
+                data-target="viewModal">
+            <image src="../../static/timg.jpg"
+                   mode="heightFix"></image>
+          </view>
+          <text class="nickname">辣条老板</text>
+        </view>
+      </view>
+
+      <view class="left-list">
+        <view class="item active">
+          <view class="item-active"></view>
+          <view class="conetnt">
+            <view class="icon">
+              <image style="width: 40rpx;height: 40rpx;margin-top: 5rpx;"
+                     src="../../static/home_active.png"
+                     mode="widthFix" />
+            </view>
+            <text>主页</text>
+          </view>
+        </view>
+        <view class="item">
+          <view class="item-active"></view>
+          <view class="conetnt">
+            <view class="icon">
+              <image style="width: 45rpx;height: 45rpx;margin-top: 2.5rpx;"
+                     src="../../static/chengji.png"
+                     mode="widthFix" />
+            </view>
+            <text>我的成绩</text>
+          </view>
+        </view>
+
+        <view class="item">
+          <view class="item-active"></view>
+          <view class="conetnt">
+            <view class="icon">
+              <image style="width: 55rpx;height: 55rpx;margin-top: -1rpx;"
+                     src="../../static/notice.png"
+                     mode="aspectFil" />
+            </view>
+            <text>成绩通知</text>
+          </view>
+        </view>
+
+        <view class="item">
+          <view class="item-active"></view>
+          <view class="conetnt">
+            <view class="icon">
+              <image style="width: 35rpx;height: 35rpx;margin-left: 8rpx;margin-top:8rpx;"
+                     src="../../static/kefu.png"
+                     mode="aspectFil" />
+            </view>
+            <text>在线客服</text>
+          </view>
+        </view>
+
+        <view class="item">
+          <view class="item-active"></view>
+          <view class="conetnt">
+            <view class="icon">
+              <image style="width: 38rpx;height: 38rpx;margin-left: 8rpx;margin-top:8rpx;"
+                     src="../../static/about.png"
+                     mode="aspectFil" />
+            </view>
+            <text>关于我们</text>
+          </view>
+        </view>
+
+        <view class="item">
+          <view class="conetnt">
+            <view class="icon">
+              <image style="width: 38rpx;height: 38rpx;margin-left: 8rpx;margin-top:9rpx;"
+                     src="../../static/tuichu@2x.png"
+                     mode="aspectFil" />
+            </view>
+            <text>退出</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
-			};
-		}
-	}
+export default {
+  data() {
+    return {
+      modalName: null,
+    }
+  },
+  methods: {
+    showModal(e) {
+      this.modalName = e.currentTarget.dataset.target
+    },
+    hideModal(e) {
+      this.modalName = null
+    },
+  },
+}
 </script>
 
-<style lang="scss">
+<style lang="scss" scpoe>
+#index-content {
+  background: #fbf6ff;
+}
+.header.hide {
+  opacity: 0;
+  // position: absolute;
+}
+.header {
+  display: flex;
+  height: 100rpx;
+  transition: all 0.6s;
+  .headimg {
+    height: 100rpx;
+    width: 100rpx;
+    border-radius: 100rpx;
+    image {
+      height: 100rpx;
+      width: 100rpx;
+      border-radius: 100rpx;
+    }
+  }
 
+  .nickname {
+    margin-left: 20rpx;
+    color: rgba(34, 34, 34, 1);
+    font-size: 42rpx;
+    text-align: left;
+    line-height: 100rpx;
+  }
+}
+
+.search {
+  width: 100%;
+  height: 100rpx;
+  background: #ffffff;
+  border-radius: 36rpx;
+  box-shadow: 0rpx 0rpx 10rpx 0rpx rgba(251, 246, 255, 0.1);
+  margin-top: 40rpx;
+  padding-left: 50rpx;
+  padding-right: 50rpx;
+  display: flex;
+
+  input {
+    height: 70rpx;
+    line-height: 70rpx;
+    font-size: 32rpx;
+    font-family: PingFangSC, PingFangSC-Regular;
+    font-weight: 400;
+    text-align: left;
+    color: #7e7e7e;
+    width: 100%;
+    margin-top: 15rpx;
+    border: none;
+    outline: none;
+    display: inline-block;
+  }
+
+  image {
+    height: 44rpx;
+    width: 44rpx;
+    margin-top: calc(56rpx / 2);
+  }
+}
+.banner {
+  margin-top: 50rpx;
+  height: 200rpx;
+  flex: 1;
+  border-radius: 30rpx;
+  box-shadow: 0rpx 10rpx 40rpx 4rpx rgba(234, 216, 249, 0.3);
+  .item {
+    flex: 1;
+    height: 200rpx;
+    width: 100%;
+    border-radius: 30rpx;
+    image {
+      height: 200rpx;
+      width: 100%;
+      border-radius: 30rpx;
+    }
+  }
+}
+
+.cuoti {
+  height: 200rpx;
+  width: 100%;
+  display: flex;
+  margin-top: 50rpx;
+
+  .item {
+    width: 290rpx;
+    height: 200rpx;
+    background: #ffffff;
+    border-radius: 50rpx;
+    box-shadow: 2rpx 4rpx 40rpx 0rpx rgba(221, 219, 219, 0.4);
+    display: flex;
+    flex-direction: column;
+    .item-top {
+      display: flex;
+      .cuoti-num {
+        margin-left: 58rpx;
+        margin-top: 26rpx;
+        width: 109rpx;
+        height: 90rpx;
+        color: #434242;
+        font-size: 64rpx;
+        font-family: PingFangSC, PingFangSC-Semibold;
+        font-weight: 600;
+        text-align: center;
+        text {
+          font-size: 64rpx;
+          font-family: PingFangSC, PingFangSC-Semibold;
+          font-weight: 600;
+          line-height: 90rpx;
+        }
+      }
+      .right {
+        padding-top: 52rpx;
+        flex: 1;
+        position: relative;
+        image {
+          width: 26rpx;
+          height: 40rpx;
+          position: absolute;
+          right: 72rpx;
+        }
+      }
+    }
+    .item-bottom {
+      padding-top: 10rpx;
+      color: #888888;
+      font-size: 32rpx;
+      font-family: PingFangSC, PingFangSC-Regular;
+      font-weight: 400;
+      text-align: center;
+      line-height: 44rpx;
+    }
+  }
+}
+.cell-title {
+  width: 100%;
+  height: 50rpx;
+  display: flex;
+  margin-top: 50rpx;
+  .left-block {
+    width: 10rpx;
+    height: 32rpx;
+    background: #a055e3;
+    border-radius: 6rpx;
+    margin-top: 10rpx;
+  }
+  .title {
+    padding-left: 10rpx;
+    color: #444444;
+    font-size: 36rpx;
+    font-family: PingFangSC, PingFangSC-Semibold;
+    font-weight: 600;
+    text-align: left;
+    line-height: 50rpx;
+    flex: 1;
+  }
+  .more {
+    width: 56rpx;
+    height: 40rpx;
+    color: #a055e3;
+    font-size: 28rpx;
+    font-family: PingFangSC, PingFangSC-Regular;
+    font-weight: 400;
+    text-align: center;
+    line-height: 50rpx;
+  }
+}
+.left-content {
+  padding-top: calc(var(--status-bar-height));
+}
+.left-header {
+  margin-top: 48rpx;
+  padding-left: 60rpx;
+}
+.left-list {
+  margin-top: 50rpx;
+  padding-right: 80rpx;
+  .item:active {
+    background: rgba($color: #000000, $alpha: 0.05);
+  }
+  .active {
+    background: #f6edff;
+    display: flex;
+    .item-active {
+      width: 15rpx;
+      border-radius: 0 20rpx 20rpx 0;
+      height: 100%;
+      background: #9237e3;
+    }
+    .conetnt {
+      margin-left: calc(70rpx - 15rpx) !important;
+      text {
+        color: #9237e3 !important;
+      }
+    }
+  }
+  .item {
+    margin: 10rpx 0;
+    height: 100rpx;
+    border-radius: 0 20rpx 20rpx 0;
+    .conetnt {
+      display: flex;
+      height: 100rpx;
+      margin-left: 70rpx;
+      .icon {
+        width: 50rpx;
+        height: 50rpx;
+        margin-top: 25rpx;
+        image {
+          width: 50rpx;
+          height: 50rpx;
+        }
+      }
+      text {
+        line-height: 100rpx;
+        font-size: 32rpx;
+        font-weight: 700;
+        color: #828085;
+        font-family: PingFangSC, PingFangSC-Regular;
+        padding-left: 60rpx;
+      }
+    }
+  }
+}
+</style>
+
+<style>
+page {
+  width: 100vw;
+  overflow: hidden;
+  background: #fbf6ff;
+}
+
+.content {
+  padding-left: 60rpx;
+  padding-right: 60rpx;
+  padding-top: calc(30rpx + var(--status-bar-height));
+}
+.DrawerPage {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0vw;
+  background-color: #fbf6ff;
+  transition: all 0.2s;
+}
+
+.DrawerPage.show {
+  transform: scale(0.75, 0.75);
+  left: 65vw;
+  box-shadow: 0 0 60upx rgba(0, 0, 0, 0.2);
+  transform-origin: 0;
+  border-radius: 40rpx;
+}
+
+.DrawerWindow {
+  position: absolute;
+  width: 65vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  transform: scale(0.9, 0.9) translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  /* padding: 100upx 0; */
+}
+
+.DrawerWindow.show {
+  transform: scale(1, 1) translateX(0%);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.DrawerClose {
+  position: absolute;
+  width: 45vw;
+  height: 100vh;
+  right: 0;
+  top: 0;
+  color: transparent;
+  padding-bottom: 30upx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.01),
+    rgba(0, 0, 0, 0.6)
+  );
+  letter-spacing: 5px;
+  font-size: 50upx;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+}
+
+.DrawerClose.show {
+  opacity: 1;
+  pointer-events: all;
+  width: 35vw;
+  color: #fff;
+}
+.DrawerClose > .close-block {
+  height: 60rpx;
+  width: 60rpx;
+  background-image: url('../../static/X@2X.png');
+  background-size: 60rpx 60rpx;
+  background-repeat: no-repeat;
+}
+.DrawerPage .cu-bar.tabbar .action button.cuIcon {
+  width: 64upx;
+  height: 64upx;
+  line-height: 64upx;
+  margin: 0;
+  display: inline-block;
+}
+
+.DrawerPage .cu-bar.tabbar .action .cu-avatar {
+  margin: 0;
+}
+
+.DrawerPage .nav {
+  flex: 1;
+}
+
+.DrawerPage .nav .cu-item.cur {
+  border-bottom: 0;
+  position: relative;
+}
+
+.DrawerPage .nav .cu-item.cur::after {
+  content: '';
+  width: 10upx;
+  height: 10upx;
+  background-color: currentColor;
+  position: absolute;
+  bottom: 10upx;
+  border-radius: 10upx;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.DrawerPage .cu-bar.tabbar .action {
+  flex: initial;
+}
 </style>
