@@ -45,10 +45,30 @@ export default {
 uni-page {
   background: #fbf6ff;
 }
+
 uni-button::after {
   border: none;
 }
+
+.ellipse-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipse-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.footer-block {
+  width: 100%;
+  /* height: 100upx; */
+  padding-bottom: env(safe-area-inset-bottom);
+}
 </style>
 <style lang="scss">
-@import "plugins/uview-ui/index.scss";
+@import 'plugins/uview-ui/index.scss';
 </style>
