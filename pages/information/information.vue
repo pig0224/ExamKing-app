@@ -48,6 +48,7 @@
 
 <style lang="scss">
 	.box {
+		height: 100vh;
 		background-color: #f8fbfc;
 	}
 
@@ -114,5 +115,6 @@
 		width: 750rpx;
 		display: flex;
 		justify-content: center;
+		padding-bottom: 60rpx;
 	}
 </style>
