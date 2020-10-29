@@ -77,8 +77,58 @@
 
         <view class="exam-list">
           <view class="exam-item">
-            <view class="exam-title">
+            <view class="exambg">
+              <image src="../../static/exambg1.png"
+                     mode="aspectFill" />
+            </view>
+            <view class="exam-title ellipse-2">
+              <text>Java 考试</text>
+            </view>
+            <view class="exam-icon">
+              <image src="../../static/examwin.png"
+                     mode="widthFix" />
+            </view>
+          </view>
 
+          <view class="exam-item">
+            <view class="exambg">
+              <image src="../../static/exambg2.png"
+                     mode="aspectFill" />
+            </view>
+            <view class="exam-title ellipse-2">
+              <text>Mysql 考试</text>
+            </view>
+            <view class="exam-icon">
+              <image src="../../static/examwin.png"
+                     mode="widthFix" />
+            </view>
+          </view>
+
+          <view class="exam-item">
+            <view class="exambg">
+              <image src="../../static/exambg3.png"
+                     mode="aspectFill" />
+            </view>
+            <view class="exam-title ellipse-2">
+              <text>大学生形式与政策 考试</text>
+            </view>
+            <view class="exam-icon">
+              <image src="../../static/examwin.png"
+                     mode="widthFix" />
+            </view>
+          </view>
+
+          <view class="exam-item">
+            <view class="exambg">
+              <image src="../../static/exambg4.png"
+                     mode="aspectFill" />
+            </view>
+            <view class="exam-title ellipse-2">
+              <text>高等数学 考试</text>
+            </view>
+            <view class="exam-icon">
+              <image src="../../static/examwin.png"
+                     mode="widthFix" />
             </view>
           </view>
         </view>
@@ -90,6 +140,22 @@
             今日成绩
           </text>
           <text class="more">更多</text>
+        </view>
+
+        <view class="today-chengji">
+          <view class="today-content">
+            <view><text class="ellipse-2">大学生形式与政策 课程考试</text>
+            </view>
+            <view>考试成绩：100分</view>
+          </view>
+          <view class="bg">
+            <image src="../../static/Oval2@2x@2x.png"
+                   mode="widthFix" />
+          </view>
+          <view class="icon">
+            <image src="../../static/calendar@2x@2x.png"
+                   mode="widthFix" />
+          </view>
         </view>
       </view>
     </scroll-view>
@@ -213,6 +279,115 @@ export default {
 </script>
 
 <style lang="scss" scpoe>
+.today-chengji {
+  width: 630rpx;
+  height: 172rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  margin-top: 28rpx;
+  position: relative;
+  .today-content {
+    position: absolute;
+    top: 10rpx;
+    left: 38rpx;
+    width: 400rpx;
+    height: 152rpx;
+    font-size: 26rpx;
+    font-family: PingFangSC, PingFangSC-Regular;
+    font-weight: 400;
+    text-align: left;
+    color: #a055e3;
+    display: flex;
+    flex-direction: column;
+    view {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+    view:nth-child(1) {
+      font-size: 30rpx;
+      font-weight: 700;
+    }
+  }
+  .icon {
+    position: absolute;
+    right: 80rpx;
+    top: 42rpx;
+    image {
+      height: 88rpx;
+      width: 88rpx;
+    }
+  }
+  .bg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    image {
+      height: 172rpx;
+      float: right;
+    }
+  }
+}
+.exam-list {
+  width: 632rpx;
+  height: 280rpx;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30rpx;
+  flex-wrap: wrap;
+  .exambg {
+    width: 300rpx;
+    height: 130rpx;
+    border-radius: 16rpx;
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    image {
+      width: 300rpx;
+      height: 130rpx;
+      border-radius: 16rpx;
+      z-index: -1;
+    }
+  }
+  .exam-item:nth-child(1) {
+    margin-bottom: 15rpx;
+  }
+  .exam-item:nth-child(2) {
+    margin-bottom: 15rpx;
+  }
+  .exam-item {
+    padding: 20rpx 16rpx;
+    width: 300rpx;
+    height: 130rpx;
+    border-radius: 16rpx;
+    position: relative;
+    .exam-title {
+      width: 260rpx;
+      font-size: 26rpx;
+      font-family: PingFangSC, PingFangSC-Regular;
+      font-weight: 400;
+      text-align: left;
+      color: #ffffff;
+      line-height: 34rpx;
+      text {
+        font-size: 26rpx;
+        font-family: PingFangSC, PingFangSC-Regular;
+        font-weight: 400;
+        text-align: left;
+        color: #ffffff;
+        line-height: 34rpx;
+      }
+    }
+    .exam-icon {
+      width: 40rpx;
+      height: 42rpx;
+      position: absolute;
+      right: 20rpx;
+      top: 74rpx;
+    }
+  }
+}
 #index-content {
   background: #fbf6ff;
 }
