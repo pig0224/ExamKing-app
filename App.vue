@@ -68,6 +68,11 @@ uni-button::after {
   /* height: 100upx; */
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+.white-header{
+		color: #fff !important;
+	}
+	
 </style>
 <style lang="scss">
 @import 'plugins/uview-ui/index.scss';
