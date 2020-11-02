@@ -1,5 +1,11 @@
 <script>
 import Vue from 'vue'
+
+import {
+	getStorage,
+	setStorage
+} from '@/utils'
+
 export default {
   onLaunch: function () {
     uni.getSystemInfo({
@@ -26,11 +32,20 @@ export default {
         // #endif
       },
     })
-    // 获取学生信息
-    this.$store.dispatch('student/getStudentInfo')
+		
   },
   onShow: function () {
     console.log('App Show')
+		// setStorage('token','')
+		// 判断是否登录
+		var token = getStorage('token');
+		if(token!=""){
+			// 获取学生信息
+			this.$store.dispatch('student/getStudentInfo')
+		}else{
+			// 未登录
+			this.$store.dispatch('student/Logout')
+		}
   },
   onHide: function () {
     console.log('App Hide')

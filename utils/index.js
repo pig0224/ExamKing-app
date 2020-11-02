@@ -249,3 +249,21 @@ export const showErrorPage = () => {
     url: '/pages/error/error'
   });
 }
+
+export const Validation = (data)=>{
+	if(data){
+		var tips = "系统异常"
+		if(typeof(data)=='string'){
+			tips = data
+		}else if(Object.prototype.toString.call(data) === `[object Object]`){
+			var fileds = Object.keys(data)
+			if(fileds.length>0){
+				var errorObj = data[fileds[fileds.length-1]]
+				tips = errorObj[errorObj.length-1]
+			}
+		}
+		showModal({
+			content: tips
+		})
+	}
+}

@@ -174,6 +174,7 @@
       <view class="left-content">
         <!-- 头部 -->
         <view class="header left-header"
+							@click="$utils.href('/pages/stu_info/stu_info')"
               :class="modalName=='viewModal'?'':'hide'">
           <view class="headimg"
                 @tap="showModal"
@@ -245,7 +246,7 @@
           </view>
         </view>
 
-        <view class="item">
+        <view class="item" @click="Logout">
           <view class="conetnt">
             <view class="icon">
               <image style="width: 38rpx;height: 38rpx;margin-left: 8rpx;margin-top:9rpx;"
@@ -261,13 +262,21 @@
 </template>
 
 <script>
+	
+import {
+		mapActions
+	} from 'vuex'
+	
 export default {
   data() {
     return {
       modalName: null,
     }
   },
+	onLoad() {
+	},
   methods: {
+		...mapActions('student', ['Logout']),
     showModal(e) {
       this.modalName = e.currentTarget.dataset.target
     },

@@ -1,16 +1,16 @@
 {
   "pages": [
     {
-      // "path": "pages/index/index",
-      "path": "pages/login/login",
+      "path": "pages/index/index",
+      // "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "",
         "enablePullDownRefresh": false
       }
     },
     {
-      // "path": "pages/login/login",
-      "path": "pages/index/index",
+      "path": "pages/login/login",
+      // "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "",
         "enablePullDownRefresh": false
@@ -51,7 +51,16 @@
         "enablePullDownRefresh": false
       }
     }
-  ],
+      ,{
+            "path" : "pages/stu_info/stu_info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
   "globalStyle": {
     "navigationBarBackgroundColor": "#0081ff",
     "navigationBarTitleText": "考试君",

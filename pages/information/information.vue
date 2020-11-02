@@ -46,7 +46,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .box {
   height: 100vh;
   background-color: #f8fbfc;

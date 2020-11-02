@@ -32,6 +32,7 @@
 
       <wButton class="wbutton"
                text="重置密码"
+							 bgColor="#9237e3"
                :rotate="isRotate"
                @click.native="startRePass()"></wButton>
 
@@ -98,7 +99,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import url('../../components/watch-login/css/icon.css');
 .content {
   display: flex;
