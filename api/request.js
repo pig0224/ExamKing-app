@@ -43,14 +43,14 @@ const _hideLoading = function () {
   });
 }
 
-const get = (url, data = "", _header = {}) => {
+const Get = (url, data = "", _header = {}) => {
   _showLoading()
   Header = addHeader(Header, {
     "Authorization": "Bearer" + " " + getStorage('token'),
   })
   return new Promise((resolve, reject) => {
     uni.request({
-      url: apiUrl + url,
+      url: apiUrl +"/"+ url,
       data: data,
       header: addHeader(Header, _header),
       success: (res) => {
@@ -82,14 +82,14 @@ const get = (url, data = "", _header = {}) => {
   })
 }
 
-const post = (url, data = "", _header = {}) => {
+const Post = (url, data = "", _header = {}) => {
   _showLoading()
   Header = addHeader(Header, {
     "token": getStorage('token'),
   })
   return new Promise((resolve, reject) => {
     uni.request({
-      url: apiUrl + url,
+      url: apiUrl +"/"+ url,
       data: data,
       method: "POST",
       header: addHeader(Header, _header),
@@ -122,7 +122,85 @@ const post = (url, data = "", _header = {}) => {
   })
 }
 
+const Put = (url, data = "", _header = {}) => {
+  _showLoading()
+  Header = addHeader(Header, {
+    "token": getStorage('token'),
+  })
+  return new Promise((resolve, reject) => {
+    uni.request({
+      url: apiUrl +"/"+ url,
+      data: data,
+      method: "PUT",
+      header: addHeader(Header, _header),
+      success: (res) => {
+        if (res.data.successed == false) {
+          if (res.data.statusCode == 500) {
+            var err = res.data.errors
+            showToast({
+              type: "error",
+              msg: err,
+              mask: true
+            });
+            return
+          }
+        }
+        resolve(err)
+      },
+      fail: (err) => {
+        showModal({
+          content: "系统异常"
+        })
+        reject(err)
+      },
+      complete: () => {
+        _hideLoading()
+      }
+    });
+  })
+}
+
+const Delete = (url, data = "", _header = {}) => {
+  _showLoading()
+  Header = addHeader(Header, {
+    "token": getStorage('token'),
+  })
+  return new Promise((resolve, reject) => {
+    uni.request({
+      url: apiUrl +"/"+ url,
+      data: data,
+      method: "DELETE",
+      header: addHeader(Header, _header),
+      success: (res) => {
+        if (res.data.successed == false) {
+          if (res.data.statusCode == 500) {
+            var err = res.data.errors
+            showToast({
+              type: "error",
+              msg: err,
+              mask: true
+            });
+            return
+          }
+        }
+        resolve(err)
+      },
+      fail: (err) => {
+        showModal({
+          content: "系统异常"
+        })
+        reject(err)
+      },
+      complete: () => {
+        _hideLoading()
+      }
+    });
+  })
+}
+
 export default {
-  get,
-  post
+  Get,
+  Post,
+	Put,
+	Delete
 }

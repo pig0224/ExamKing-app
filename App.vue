@@ -27,7 +27,7 @@ export default {
       },
     })
     // 获取学生信息
-    // this.$store.dispatch('student/getStudentInfo')
+    this.$store.dispatch('student/getStudentInfo')
   },
   onShow: function () {
     console.log('App Show')
