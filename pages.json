@@ -45,6 +45,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/exam_result/exam_result",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#0081ff",
