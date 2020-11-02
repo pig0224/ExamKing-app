@@ -80,13 +80,15 @@
 					data
 				}) => {
 					// reLaunch登录页面
-					uni.reLaunch({
+					return uni.reLaunch({
 						url: '/pages/index/index'
 					});
 				}).catch(({errors})=>{
-					Validation(errors)
+					return Validation(errors)
 				})
-				this.isRotate = false
+				setTimeout(function(){
+					_this.isRotate = false
+				}, 500)
 			},
 		},
 	}

@@ -68,21 +68,9 @@ const Get = (url, data = "", _header = {}) => {
 			success: (res) => {
 				if (res.statusCode == 200) {
 					if (res.data.successed == false) {
-						// 500异常处理
-						if (res.data.statusCode == 500) {
-							var err = res.data.errors
-							showToast({
-								type: "error",
-								msg: err,
-								mask: true
-							})
-							return
-						}
-						// 400字段验证失败
-						if (res.data.statusCode == 400) {
-							reject(res.data)
-							return
-						}
+						// 异常和验证处理
+						reject(res.data)
+						return
 					}
 					resolve(res)
 				} else if (res.statusCode == 401) {
@@ -125,21 +113,9 @@ const Post = (url, data = "", _header = {}) => {
 			success: (res) => {
 				if (res.statusCode == 200) {
 					if (res.data.successed == false) {
-						// 500异常处理
-						if (res.data.statusCode == 500) {
-							var err = res.data.errors
-							showToast({
-								type: "error",
-								msg: err,
-								mask: true
-							})
-							return
-						}
-						// 400字段验证失败
-						if (res.data.statusCode == 400) {
-							reject(res.data)
-							return
-						}
+						// 异常和验证处理
+						reject(res.data)
+						return
 					}
 					resolve(res)
 				} else if (res.statusCode == 401) {
@@ -181,21 +157,9 @@ const Put = (url, data = "", _header = {}) => {
 			success: (res) => {
 				if (res.statusCode == 200) {
 					if (res.data.successed == false) {
-						// 500异常处理
-						if (res.data.statusCode == 500) {
-							var err = res.data.errors
-							showToast({
-								type: "error",
-								msg: err,
-								mask: true
-							})
-							return
-						}
-						// 400字段验证失败
-						if (res.data.statusCode == 400) {
-							reject(res.data)
-							return
-						}
+						// 异常和验证处理
+						reject(res.data)
+						return
 					}
 					resolve(res)
 				} else if (res.statusCode == 401) {
@@ -237,21 +201,9 @@ const Delete = (url, data = "", _header = {}) => {
 			success: (res) => {
 				if (res.statusCode == 200) {
 					if (res.data.successed == false) {
-						// 500异常处理
-						if (res.data.statusCode == 500) {
-							var err = res.data.errors
-							showToast({
-								type: "error",
-								msg: err,
-								mask: true
-							})
-							return
-						}
-						// 400字段验证失败
-						if (res.data.statusCode == 400) {
-							reject(res.data)
-							return
-						}
+						// 异常和验证处理
+						reject(res.data)
+						return
 					}
 					resolve(err)
 				} else if (res.statusCode == 401) {
