@@ -79,7 +79,8 @@
 	} from '../../utils'
   import {mapActions} from 'vuex'
 	export default {
-		onLoad() {
+		async onLoad() {
+			await this.$store.dispatch('student/getStudentInfo')
 			this.StuName = this.$store.state.student.StuName
 			this.Telphone = this.$store.state.student.Telphone
 			this.IdCard = this.$store.state.student.IdCard
@@ -88,7 +89,10 @@
 		data() {
 			return {
 				StuName: "",
+				Telphone:"",
 				Password: '', //密码
+				IdCard:"男",
+				Sex:"",
 				isRotate: false, //是否加载旋转
 				showSex: false,
 				sexList: ['男', '女', '保密'],
