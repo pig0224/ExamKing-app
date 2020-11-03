@@ -101,6 +101,11 @@ export default {
 
 <style scoped>
 @import url('../../components/watch-login/css/icon.css');
+
+.forget{
+	min-height: 100vh;
+}
+
 .content {
   display: flex;
   flex-direction: column;

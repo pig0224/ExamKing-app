@@ -177,7 +177,9 @@
 
 <style scoped>
 	@import url('../../components/watch-login/css/icon.css');
-
+	.register{
+		min-height: 100vh;
+	}
 	.content {
 		display: flex;
 		flex-direction: column;

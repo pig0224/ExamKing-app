@@ -399,6 +399,7 @@ export default {
 }
 #index-content {
   background: #fbf6ff;
+	min-height: 100vh;
 }
 .header.hide {
   opacity: 0;

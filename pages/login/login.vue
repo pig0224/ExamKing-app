@@ -96,7 +96,9 @@
 
 <style lang="scss" scope>
 	@import url('../../components/watch-login/css/icon.css');
-
+	.login{
+		min-height: 100vh;
+	}
 	.content {
 		display: flex;
 		flex-direction: column;

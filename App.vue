@@ -57,10 +57,6 @@ export default {
 @import 'plugins/colorui/main.css';
 @import 'plugins/colorui/icon.css';
 
-uni-page {
-  background: #fbf6ff;
-}
-
 uni-button::after {
   border: none;
 }
@@ -79,7 +75,7 @@ uni-button::after {
 }
 
 .footer-block {
-  width: 100%;
+  width: 100vw;
   /* height: 100upx; */
   padding-bottom: env(safe-area-inset-bottom);
 }

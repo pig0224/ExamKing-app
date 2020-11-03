@@ -57,7 +57,7 @@
 	}
 
 	.exam {
-		height: 100vh;
+		min-height: 100vh;
 	}
 
 	.a {
@@ -85,7 +85,7 @@
 			color: #ffffff;
 			line-height: 134rpx;
 			position: relative;
-			top: 45rpx;
+			top: 36rpx;
 		}
 	}
 

@@ -6,6 +6,7 @@
   "versionCode": 214,
   "transformPx": false,
   "app-plus": {
+		"runmode":"liberate",
     "safearea": {
       "background": "#CCCCCC",
       "bottom": {

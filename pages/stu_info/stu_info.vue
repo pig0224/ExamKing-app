@@ -1,5 +1,5 @@
 <template>
-	<view class="register">
+	<view class="stu_info">
 
 		<!-- <u-select v-model="showSex" :safe-area-inset-bottom="true" :mask-close-able="false" title="请选择性别" @cancel="cancelChoose"
 		 @confirm="chooseSex" :list="sexList"></u-select> -->
@@ -159,7 +159,8 @@
 <style scoped lang="scss">
 	@import url('../../components/watch-login/css/icon.css');
 
-	.register {
+	.stu_info {
+		min-height: 100vh;
 		background: #fbf6ff;
 	}
 
