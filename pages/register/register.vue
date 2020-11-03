@@ -34,7 +34,8 @@
 	import wInput from '../../components/watch-login/watch-input.vue' //input
 	import wButton from '../../components/watch-login/watch-button.vue' //button
 	import {
-		showModal
+		showModal,
+		Validation
 	} from '../../utils'
 
 	export default {
@@ -52,45 +53,19 @@
 				showSex: false,
 				showDeptClass: false,
 				sexList: [{
-						value: '男',
+						value: '0',
 						label: '男',
 					},
 					{
-						value: '女',
+						value: '1',
 						label: '女',
 					},
 					{
-						value: '保密',
+						value: '2',
 						label: '保密',
 					},
 				],
-				deptClassList: [{
-						value: 1,
-						label: '信息工程系',
-						children: [{
-								value: 1,
-								label: '软件1832',
-							},
-							{
-								value: 2,
-								label: '软件1831',
-							},
-						],
-					},
-					{
-						value: 2,
-						label: '建筑系',
-						children: [{
-								value: 1,
-								label: '建筑1832',
-							},
-							{
-								value: 2,
-								label: '建筑1831',
-							},
-						],
-					},
-				],
+				deptClassList: [],
 			}
 		},
 		components: {
@@ -99,6 +74,36 @@
 		},
 		mounted() {
 			_this = this
+		},
+		async onLoad() {
+			// 获取系别
+			var detps = []
+			var deptClassList = []
+			await this.$api.GetAllDept().then(({
+				data
+			}) => {
+				if (data.successed == true) {
+					detps = data.data
+				}
+			})
+			detps.forEach((item, index) => {
+				var children = []
+				item.classes.forEach((citem, cindex) => {
+					children.push({
+						value: citem.id,
+						label: citem.classesName,
+					})
+				})
+				var deptItem = {
+					value: item.id,
+					label: item.deptName,
+					children: children
+				}
+				if (children.length > 0) {
+					deptClassList.push(deptItem)
+				}
+			})
+			this.deptClassList = deptClassList
 		},
 		methods: {
 			startReg() {
@@ -152,21 +157,44 @@
 				//选择系别班级
 				this.showDeptClass = true
 			},
-			chooseDeptClass(e) {
+			async chooseDeptClass(e) {
 				console.log('chooseDeptClass -> e', e)
 				this.DeptId = e[0]['value']
 				console.log('chooseDeptClass -> this.DeptId', this.DeptId)
 				this.ClassesId = e[1]['value']
 				console.log('chooseDeptClass -> this.ClassesId', this.ClassesId)
-				setTimeout(function() {
-					showModal({
-						content: '注册成功',
-						success: function() {
-							_this.$utils.Back()
-							_this.isRotate = false
-						},
-					})
-				}, 3000)
+				var StuNo = this.StuNo
+				var Password = this.Password
+				var StuName = this.StuName
+				var Telphone = this.Telphone
+				var IdCard = this.IdCard
+				var DeptId = this.DeptId
+				var ClassesId = this.ClassesId
+				var Sex = this.sex
+				await this.$api.Register({
+					stuName:StuName,
+					deptId:DeptId,
+					classesId:ClassesId,
+					sex:Sex,
+					stuNo:StuNo,
+					password:Password,
+					telphone:Telphone,
+					idCard:IdCard
+				}).then(({
+					data
+				}) => {
+					setTimeout(function() {
+						showModal({
+							content: '注册成功',
+							success: function() {
+								_this.$utils.Back()
+							},
+						})
+					}, 500)
+				}).catch(({errors})=>{
+					Validation(errors)
+				})
+				_this.isRotate = false
 			},
 			cancelChoose() {
 				this.isRotate = false
@@ -177,9 +205,11 @@
 
 <style scoped>
 	@import url('../../components/watch-login/css/icon.css');
-	.register{
+
+	.register {
 		min-height: 100vh;
 	}
+
 	.content {
 		display: flex;
 		flex-direction: column;

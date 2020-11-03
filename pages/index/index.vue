@@ -13,7 +13,7 @@
             <image src="../../static/timg.jpg"
                    mode="heightFix"></image>
           </view>
-          <text class="nickname">辣条老板</text>
+          <text class="nickname">{{StuName}}</text>
         </view>
         <!-- 搜索 -->
         <view class="search">
@@ -182,7 +182,7 @@
             <image src="../../static/timg.jpg"
                    mode="heightFix"></image>
           </view>
-          <text class="nickname">辣条老板</text>
+          <text class="nickname">{{StuName}}</text>
         </view>
       </view>
 
@@ -264,16 +264,17 @@
 <script>
 	
 import {
-		mapActions
+		mapActions, mapState
 	} from 'vuex'
 	
 export default {
   data() {
     return {
-      modalName: null,
+      modalName: null
     }
   },
-	onLoad() {
+	computed: {
+		...mapState('student', ['StuName']),
 	},
   methods: {
 		...mapActions('student', ['Logout']),

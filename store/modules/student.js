@@ -1,6 +1,6 @@
 import {
 	Login,
-	getStudentInfo
+	GetStudentInfo
 } from '../../api'
 
 import {
@@ -79,31 +79,13 @@ const actions = {
 			}
 		})
 	},
-	// // 学生注册
-	// async Resgister({
-	//   dispatch, state, commit
-	// }, {
-	//   stuName, deptId, classesId, sex, stuNo, password, telphone, idCard
-	// }) {
-	//   return await Register({
-	//     dispatch, state, commit
-	//   }, {
-	//     stuName, deptId, classesId, sex, stuNo, password, telphone, idCard
-	//   }).then(({ data }) => {
-	//     if (data.Successed == true) {
-	//       return Promise.resolve(data.data)
-	//     } else {
-	//       return Promise.reject(data.data)
-	//     }
-	//   })
-	// },
 	// 获取学生信息
 	async getStudentInfo({
 		dispatch,
 		state,
 		commit
 	}) {
-		return await getStudentInfo().then(({
+		return await GetStudentInfo().then(({
 			data
 		}) => {
 			if (data.successed == true) {

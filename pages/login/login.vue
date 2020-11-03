@@ -60,12 +60,12 @@
 				}
 				var studentNo = this.studentNo
 				var password = this.password
-				if (!studentNo) {
-					showModal({
-						content: '请输入学号'
-					})
-					return
-				}
+				// if (!studentNo) {
+				// 	showModal({
+				// 		content: '请输入学号'
+				// 	})
+				// 	return
+				// }
 				if (!password) {
 					showModal({
 						content: '请输入密码'

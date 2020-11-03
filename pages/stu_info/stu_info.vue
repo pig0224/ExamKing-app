@@ -137,7 +137,7 @@
 					return
 				}
 				this.isRotate = true
-				await this.$api.editStudentInfo({
+				await this.$api.EditStudentInfo({
 					stuName,sex,telphone,password,idCard
 				}).then(({data})=>{
 					_this.getStudentInfo()

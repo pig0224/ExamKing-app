@@ -45,7 +45,7 @@ var _this
 import wInput from '../../components/watch-login/watch-input.vue' //input
 import wButton from '../../components/watch-login/watch-button.vue' //button
 
-import { showModal } from '../../utils'
+import { showModal, Validation } from '../../utils'
 export default {
   data() {
     return {
@@ -63,7 +63,7 @@ export default {
     _this = this
   },
   methods: {
-    startRePass() {
+    async startRePass() {
       //重置密码
       if (this.isRotate) {
         //判断是否加载中，避免重复点击请求
@@ -85,15 +85,23 @@ export default {
         return
       }
       this.isRotate = true
-      setTimeout(function () {
-        showModal({
-          content: '找回成功',
-          success: function () {
-            _this.$utils.Back()
-            _this.isRotate = false
-          },
-        })
-      }, 3000)
+			await this.$api.ForgetPass({
+				stuNo:StudentNo,
+				idCard:IdCard,
+				newPass:Password
+			}).then(({data})=>{
+				return setTimeout(function () {
+				  showModal({
+				    content: '找回成功',
+				    success: function () {
+				      _this.$utils.Back()
+				    },
+				  })
+				}, 500)
+			}).catch(({errors})=>{
+				Validation(errors)
+			})
+      _this.isRotate = false
     },
   },
 }
