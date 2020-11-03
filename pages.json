@@ -60,6 +60,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/all-exam/all-exam",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
   "globalStyle": {
     "navigationBarBackgroundColor": "#0081ff",
