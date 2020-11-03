@@ -74,6 +74,7 @@ const actions = {
 				// 缓存accessToken
 				await setStorage('token', data.data.accessToken)
 				commit('setToken', data.data.accessToken)
+				dispatch("getStudentInfo")
 				return Promise.resolve(data)
 			}
 		})
