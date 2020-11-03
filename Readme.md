@@ -18,11 +18,8 @@ git checkout -b develop origin/develop
 > ⚠️ 注意：feature命名规范feature-英文名-版本号
 
 ```sh
-# 创建feature分支
-git branch feature-pig224-v0.0.1
-
-#切换此分区
-git checkout feature-pig224-v0.0.1
+# 从远程develop分支检出到本地feature分支
+git checkout -b feature-alias origin/develop
 ```
 #### 4.代码开发
 
