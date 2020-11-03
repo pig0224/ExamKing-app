@@ -61,7 +61,7 @@
             
         }
         ,{
-            "path" : "pages/all-exam/all-exam",
+            "path" : "pages/all_exam/all_exam",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
