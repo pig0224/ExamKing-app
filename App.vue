@@ -76,10 +76,12 @@ uni-button::after {
 
 .footer-block {
   width: 100vw;
-  /* height: 100upx; */
   padding-bottom: env(safe-area-inset-bottom);
 }
-
+.header-block{
+	width: 100vw;
+	padding-bottom: env(safe-area-inset-top);
+}
 .white-header{
 		color: #fff !important;
 	}
