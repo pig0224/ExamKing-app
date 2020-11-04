@@ -118,12 +118,12 @@
 				var telphone = this.Telphone
 				var idCard = this.IdCard
 				var sex = this.Sex=="男" ? "0" : this.Sex=="女"? "1" : "2"
-				// if (!stuName) {
-				// 	showModal({
-				// 		content: '请输入姓名',
-				// 	})
-				// 	return
-				// }
+				if (!stuName) {
+					showModal({
+						content: '请输入姓名',
+					})
+					return
+				}
 				if (!telphone) {
 					showModal({
 						content: '请输入手机号',

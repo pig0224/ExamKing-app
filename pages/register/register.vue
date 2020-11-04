@@ -153,7 +153,8 @@
 			},
 			chooseSex(e) {
 				console.log('chooseSex -> e', e)
-				this.sex = e[0]['value']
+				this.Sex = e[0]['value']
+				console.log(this.Sex)
 				//选择系别班级
 				this.showDeptClass = true
 			},
@@ -170,7 +171,7 @@
 				var IdCard = this.IdCard
 				var DeptId = this.DeptId
 				var ClassesId = this.ClassesId
-				var Sex = this.sex
+				var Sex = this.Sex
 				await this.$api.Register({
 					stuName:StuName,
 					deptId:DeptId,
