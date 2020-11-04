@@ -30,7 +30,7 @@
 					</view>
 				</view>
 				<view class="exam-btn">
-					<button class="exam-sumbit"><text>交卷</text></button>
+					<button class="exam-sumbit"><text>交 卷</text></button>
 				</view>
 			</view>
 		</u-popup>
@@ -122,17 +122,18 @@
 </script>
 <style lang="scss" scoped>
 	.app-content{
-		margin: 0 40rpx 46rpx 40rpx;
+		margin: 0 40rpx 25rpx 40rpx;
 		.exam-btn{
-			padding: 20rpx 160rpx 0 160rpx;
+			padding: 0rpx 200rpx 0 200rpx;
 			.exam-sumbit{
 				height: 88rpx;
-				background: #2db0fe;
+				background: #fff;
 				border-radius: 10rpx;
-				font-size: 32rpx;
+				font-size: 36rpx;
 				line-height: 88rpx;
-				color: #fff;
+				color: #2db0fe;
 				text-align: center;
+				
 			}
 		}
 		.datilist{
@@ -184,10 +185,10 @@
 				position: relative;
 				line-height: 88rpx;
 				text-align: center;
+				font-size: 32rpx;
 				text{
 					width: 520rpx;
 					height: 88rpx;
-					font-size: 32rpx;
 					font-family: PingFangSC, PingFangSC-Light;
 					font-weight: 300;
 					text-align: center;
