@@ -73,6 +73,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/questions/questions",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#0081ff",
