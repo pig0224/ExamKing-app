@@ -61,7 +61,7 @@
 					<text class="title">
 						考试课程
 					</text>
-					<text class="more">更多</text>
+					<text class="more" @click="$utils.href('/pages/all_exam/all_exam')">更多</text>
 				</view>
 
 				<view class="exam-list">

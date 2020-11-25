@@ -4,10 +4,11 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationStyle": "custom",
+				"disableScroll": false,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
-						"color": "#9237e3",
+						"color": "rgb(41, 121, 255)",
 						"bounce": "none",
 						"titleNView": false
 					}
@@ -66,10 +67,11 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "全部考试",
+				"disableScroll": false,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
-						"color": "#9237e3"
+						"color": "rgb(41, 121, 255)"
 					}
 				}
 			}
@@ -83,10 +85,11 @@
 			"path": "pages/wrongs/wrongs",
 			"style": {
 				"enablePullDownRefresh": true,
+				"disableScroll": false,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
-						"color": "#9237e3"
+						"color": "rgb(41, 121, 255)"
 					}
 				}
 			}
@@ -96,10 +99,11 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "搜索结果",
+				"disableScroll": false,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
-						"color": "#9237e3"
+						"color": "rgb(41, 121, 255)"
 					}
 				}
 			}

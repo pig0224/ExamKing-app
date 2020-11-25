@@ -1,57 +1,60 @@
 <template>
 	<view class="box">
 		<u-tabs :list="tabs" :is-scroll="false" :current="current" @change="changeTab"></u-tabs>
-		<view class="on-line" style="padding-top: 30rpx;">
-			<view class="category" v-for="(index, item) in 5" :key="index">
+		<view class="search-none" v-if="items.length==0">
+			<view class="search-none-icon">
+			</view>
+		</view>
+		<view class="on-line" v-else>
+			<view class="category" @click="goExam(item.id)" v-for="(item, index) in items" :key="index">
 				<view class="exam-title">
-					<text>大学生形式与政策课程 在线考试</text>
+					<text>{{item.examName}}</text>
 				</view>
 				<view class="subject">
 					<view class="nubber">
-						<text class="num">50</text>
+						<text class="num">{{item.examquestions.length}}</text>
 						<text class="txt">总题数</text>
 					</view>
 					<view class="nubber">
-						<text class="num">20</text>
+						<text class="num">{{$utils.QuestionCount(item.examquestions, "judge")}}</text>
 						<text class="txt">是非题</text>
 					</view>
 					<view class="nubber">
-						<text class="num">30</text>
+						<text class="num">{{$utils.QuestionCount(item.examquestions, "select")+$utils.QuestionCount(item.examquestions, "select")}}</text>
 						<text class="txt">选择题</text>
 					</view>
 				</view>
-
 				<view class="footer">
 					<view class="item" style="margin-left: 30rpx;">
 						<!-- <image src="../../static/data.svg" style="margin-right: 8rpx;" mode="aspectFit"></image> -->
 						<view class="date-icon"></view>
-						<text>2020-10-29 18:00</text>
+						<text>{{item.startTime}}</text>
 					</view>
 					<view class="item" style="padding-left: 30rpx;">
 						<!-- <image src="../../static/time.svg" style="margin-right: 8rpx;" mode="aspectFit"></image> -->
 						<view class="time-icon"></view>
-						<text>90分钟</text>
+						<text>{{$utils.showTime(item.duration)}}</text>
 					</view>
 					<view class="item" style="flex: 1;">
-						<view class="none-exam" style="float: right;">
+						<view v-if="item.isEnable=='1'&&item.isFinish=='0'" class="none-exam" style="float: right;">
+							<text class="txt">考试中</text>
+						</view>
+						<view class="finsh-exam" v-if="item.isEnable=='0'&&item.isFinish=='0'" style="float: right;">
 							<text class="txt">未考试</text>
 						</view>
-						<view class="finsh-exam" style="display: none;float: right;">
+						<view class="err-exam" v-if="item.isEnable=='1'&&item.isFinish=='1'" style="float: right;">
 							<text class="txt">已结束</text>
-						</view>
-						<view class="err-exam" style="display: none;float: right;">
-							<text class="txt">缺考</text>
 						</view>
 					</view>
 				</view>
 			</view>
-
 		</view>
 		<view class="footer-block"></view>
 	</view>
 </template>
 
 <script>
+	var _this
 	export default {
 		data() {
 			return {
@@ -62,20 +65,156 @@
 				}, {
 					name: '已结束',
 				}],
-				current: 0
+				pageindex: 1,
+				pagesize: 10,
+				current: 0,
+				items: []
 			};
 		},
-		methods:{
-			changeTab(index){
+		async onPullDownRefresh() {
+			this.pageindex = 1
+			_this.items = []
+			await this.getItems()
+			uni.stopPullDownRefresh();
+		},
+		onReachBottom() {
+			this.getItems()
+		},
+		onLoad() {
+			_this = this
+			this.getItems()
+		},
+		methods: {
+			async getItems(){
+				if(this.current==0){
+					return await this.$api.GetExamOnlineList({
+						pageindex: _this.pageindex,
+						pagesize: _this.pagesize
+					}).then(({
+						data
+					}) => {
+						if (_this.pageindex <= data.data.totalPages) {
+							if (_this.pageindex == 1) {
+								_this.items = []
+							}
+							data.data.items.forEach((item) => {
+								_this.items.push(item)
+							})
+						}
+						_this.pageindex++
+					})
+				}else if(this.current==1){
+					return await this.$api.GetExamWaitList({
+						pageindex: _this.pageindex,
+						pagesize: _this.pagesize
+					}).then(({
+						data
+					}) => {
+						if (_this.pageindex <= data.data.totalPages) {
+							if (_this.pageindex == 1) {
+								_this.items = []
+							}
+							data.data.items.forEach((item) => {
+								_this.items.push(item)
+							})
+						}
+						_this.pageindex++
+					})
+				}else if(this.current==2){
+					return await this.$api.GetExamFinshList({
+						pageindex: _this.pageindex,
+						pagesize: _this.pagesize
+					}).then(({
+						data
+					}) => {
+						if (_this.pageindex <= data.data.totalPages) {
+							if (_this.pageindex == 1) {
+								_this.items = []
+							}
+							data.data.items.forEach((item) => {
+								_this.items.push(item)
+							})
+						}
+						_this.pageindex++
+					})
+				}
+			},
+			async goExam(id) {
+				// 查询考试信息
+				var item = ""
+				await this.$api.GetExamInfo(id).then(({data})=>{
+					item = data.data
+				})
+				if (item.isFinish == '1') { // 考试结束
+					uni.navigateTo({
+						url: '/pages/exam_result/exam_result',
+						success: function(res) {
+							res.eventChannel.emit('onExamDetail', {
+								detail: item
+							})
+						}
+					})
+				} else if (item.isEnable == '1' && item.isFinish == '1') { //正在考试
+					// 判断是否答过题
+					if(item.stuanswerdetails.length>0){
+						// 继续答题
+						uni.navigateTo({
+							url: '/pages/exam_detail/exam_detail',
+							success: function(res) {
+								res.eventChannel.emit('onExamDetail', {
+									detail: item
+								})
+							}
+						})
+					}else{
+						uni.navigateTo({
+							url: '/pages/exam_start/exam_start',
+							success: function(res) {
+								res.eventChannel.emit('onExamDetail', {
+									detail: item
+								})
+							}
+						})
+					}
+				} else if (item.isEnable == '0') { // 考试未开始
+					uni.navigateTo({
+						url: '/pages/exam_start/exam_start',
+						success: function(res) {
+							res.eventChannel.emit('onExamDetail', {
+								detail: item
+							})
+						}
+					})
+				}
+			},
+			changeTab(index) {
 				this.current = index
+				this.pageindex = 1
+				_this.items = []
+			  this.getItems()
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.box {
-		background: #F5F6F7;
+	
+	.search-none {
+		margin: 0;
+		padding: 0;
+		width: 100vw;
+		height: 288rpx;
+		display: flex;
+		padding-top: 200rpx;
+		justify-content: center;
+
+		.search-none-icon {
+			width: 538rpx;
+			height: 288rpx;
+			background-image: url(../../static/search-none.svg);
+			background-repeat: no-repeat;
+			background-size: 538rpx 288rpx;
+		}
 	}
 
 	.finsh-exam {
@@ -148,8 +287,7 @@
 	}
 
 	.on-line {
-		padding-left: 30rpx;
-		padding-right: 30rpx;
+		padding: 30rpx;
 	}
 
 	.category {

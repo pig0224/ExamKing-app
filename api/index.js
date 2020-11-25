@@ -138,3 +138,23 @@ export const GetQuestionIdeas = ({
 }) => {
 	return request.Get(`exam/question-ideas/${id}/${questiontype}`)
 }
+
+// 获取考试信息
+export const GetExamInfo = (id) =>{
+	return request.Get(`exam/exam-result/${id}`)
+}
+
+// 获取正在考试列表
+export const GetExamOnlineList = (query) => {
+	return request.Get('exam/exam-online-list', query)
+}
+
+// 获取未考试列表
+export const GetExamWaitList = (query) => {
+	return request.Get('exam/exam-wait-list', query)
+}
+
+// 获取已考试列表
+export const GetExamFinshList = (query) => {
+	return request.Get('exam/exam-finsh-list', query)
+}

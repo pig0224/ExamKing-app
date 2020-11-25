@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="box">
-			
+
 			<u-navbar title="错题本"></u-navbar>
 			<view class="image-header">
 				<image src="../../static/wrong_bg.png" mode="widthFix"></image>
@@ -150,19 +150,19 @@
 				stuName: store.state.student.StuName,
 				single: {
 					pageindex: 1,
-					pagesize: 1,
+					pagesize: 10,
 					hasNextPages: true,
 					items: []
 				},
 				select: {
 					pageindex: 1,
-					pagesize: 1,
+					pagesize: 10,
 					hasNextPages: true,
 					items: []
 				},
 				judge: {
 					pageindex: 1,
-					pagesize: 1,
+					pagesize: 10,
 					hasNextPages: true,
 					items: []
 				}

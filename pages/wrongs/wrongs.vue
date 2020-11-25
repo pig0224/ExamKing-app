@@ -31,7 +31,7 @@
 			return {
 				title: '全部错题',
 				pageindex: 1,
-				pagesize: 1,
+				pagesize: 10,
 				items: []
 			};
 		},

@@ -14,18 +14,18 @@
 			<view class="app-content">
 				<view class="app-header">
 					<view class="exam-title ellipse-line">
-						大学生形式与政策课程 在线考试 
+						{{detail.examName}}
 					</view>
 					<view class="close-app" @click="closeapp"></view>
 				</view>
 				<view class="datilist">
-					<view class="dati-item dati-suc" v-for="(item, index) in 10" :key="index">
+					<view class="dati-item dati-suc">
 						<text>1</text>
 					</view>
-					<view class="dati-item dati-err" v-for="(item, index) in 3" :key="index">
+					<view class="dati-item dati-err">
 						<text>1</text>
 					</view>
-					<view class="dati-item dati-none" v-for="(item, index) in 6" :key="index">
+					<view class="dati-item dati-none">
 						<text>1</text>
 					</view>
 				</view>
@@ -104,19 +104,33 @@
 </template>
 
 <script>
+	var _this
 	export default {
 		data() {
 			return {
-				showApp: false
+				showApp: false,
+				id:0,
+				detail:""
 			};
 		},
 		methods: {
+			async getExamInfo(){
+				
+			},
 			openapp() {
 				this.showApp = true
 			},
 			closeapp(){
 				this.showApp = false
 			}
+		},
+		onLoad() {
+			_this = this
+			const eventChannel = this.getOpenerEventChannel()
+			eventChannel.on('onExamDetail', function(data) {
+				_this.detail = data.detail
+				// _this.getSelects()
+			})
 		}
 	}
 </script>

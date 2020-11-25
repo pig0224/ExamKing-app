@@ -28,6 +28,11 @@
 	}
 </script>
 <style>
+	
+	page {
+		background: #F5F6F7;
+	}
+	
 	uni-button::after {
 		border: none;
 	}

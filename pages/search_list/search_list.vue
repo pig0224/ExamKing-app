@@ -5,7 +5,7 @@
 			</view>
 		</view>
 		<view class="on-line" v-else>
-			<view class="category" v-for="(item, index) in items" :key="index">
+			<view class="category" @click="goExam(item.id)" v-for="(item, index) in items" :key="index">
 				<view class="exam-title">
 					<text>{{item.examName}}</text>
 				</view>
@@ -59,12 +59,13 @@
 			return {
 				keyword: "",
 				pageindex: 1,
-				pagesize: 1,
+				pagesize: 10,
 				items: []
 			};
 		},
 		async onPullDownRefresh() {
 			this.pageindex = 1
+			_this.items = []
 			await this.search()
 			uni.stopPullDownRefresh();
 		},
@@ -72,6 +73,54 @@
 			this.search()
 		},
 		methods: {
+			async goExam(id) {
+				// 查询考试信息
+				var item = ""
+				await this.$api.GetExamInfo(id).then(({data})=>{
+					item = data.data
+				})
+				if (item.isFinish == '1') { // 考试结束
+					uni.navigateTo({
+						url: '/pages/exam_result/exam_result',
+						success: function(res) {
+							res.eventChannel.emit('onExamDetail', {
+								detail: item
+							})
+						}
+					})
+				} else if (item.isEnable == '1' && item.isFinish == '1') { //正在考试
+					// 判断是否答过题
+					if(item.stuanswerdetails.length>0){
+						// 继续答题
+						uni.navigateTo({
+							url: '/pages/exam_detail/exam_detail',
+							success: function(res) {
+								res.eventChannel.emit('onExamDetail', {
+									detail: item
+								})
+							}
+						})
+					}else{
+						uni.navigateTo({
+							url: '/pages/exam_start/exam_start',
+							success: function(res) {
+								res.eventChannel.emit('onExamDetail', {
+									detail: item
+								})
+							}
+						})
+					}
+				} else if (item.isEnable == '0') { // 考试未开始
+					uni.navigateTo({
+						url: '/pages/exam_start/exam_start',
+						success: function(res) {
+							res.eventChannel.emit('onExamDetail', {
+								detail: item
+							})
+						}
+					})
+				}
+			},
 			async search() {
 				return await this.$api.SearchExamList({
 					keyword: _this.keyword,
@@ -80,7 +129,7 @@
 				}).then(({
 					data
 				}) => {
-					if(_this.pageindex <= data.data.totalPages){
+					if (_this.pageindex <= data.data.totalPages) {
 						if (_this.pageindex == 1) {
 							_this.items = []
 						}
@@ -121,6 +170,7 @@
 			background-size: 538rpx 288rpx;
 		}
 	}
+
 	.progress {
 		display: flex;
 		justify-content: space-around;
@@ -220,7 +270,7 @@
 			line-height: 50rpx;
 		}
 	}
-
+	
 	.on-line {
 		padding-left: 30rpx;
 		padding-right: 30rpx;
