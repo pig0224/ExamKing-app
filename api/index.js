@@ -5,11 +5,6 @@ export const GetAllDept = () => {
 	return request.Get('dept/dept-all')
 }
 
-// 获取全部班级
-export const GetAllClasses = () => {
-	return request.Get('classes/classes-all')
-}
-
 // 根据系别Id获取班级
 export const GetClassesByDept = ({
 	detpid
@@ -86,4 +81,60 @@ export const EditStudentInfo = ({
 		password,
 		idCard
 	})
+}
+
+// 获取全部错题数
+export const GetWrongAnswerCount = () => {
+	return request.Get('index/wrong-answer-count')
+}
+
+// 获取今日错题数
+export const GetWrongAnswerTodayCount = () => {
+	return request.Get('index/wrong-answer-today-count')
+}
+
+// 获取最新一条成绩
+export const GetExamScoreOne = () => {
+	return request.Get('index/exam-score')
+}
+
+// 搜索考试
+export const SearchExamList = ( query ) => {
+	return request.Get('index/search-exam', query)
+}
+
+// 查询最新考试列表
+export const GetExamNewList = (query) =>{
+	return request.Get('index/exam-new-list', query)
+}
+
+// 获取今日错题集列表
+export const GetWrongTodayList = (query) => {
+	return request.Get('wrong/wrong-today-list', query)
+}
+
+// 获取全部错题集列表
+export const GetWrongList = (query) => {
+	return request.Get('wrong/wrong-list', query)
+}
+
+// 获取错题本单选题列表
+export const GetWrongSingles = (query) => {
+	return request.Get('wrong/wrong-singles', query)
+}
+// 获取错题本多选题列表
+export const GetWrongSelects = (query) => {
+	return request.Get('wrong/wrong-selects', query)
+}
+// 获取错题本是非题列表
+export const GetWrongJudges = (query) => {
+	return request.Get('wrong/wrong-judges', query)
+}
+
+// 获取解题思路
+export const GetQuestionIdeas = ({
+	id,
+	questiontype
+}) => {
+	return request.Get(`exam/question-ideas/${id}/${questiontype}`)
 }

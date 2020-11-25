@@ -1,86 +1,125 @@
 <template>
 	<view class="box">
-		<cu-custom bgColor="bg-white" :isBack="true">
-			<block slot="backText"></block>
-			<block slot="content">全部考试</block>
-		</cu-custom>
-		<view class="tabs">
-			<view class="progress">
-				<view class="text active"><text>考试中</text></view>
-				<view class="text"><text>未考试</text></view>
-				<view class="text"><text>已考试</text></view>
+		<view class="search-none" v-if="items.length==0">
+			<view class="search-none-icon">
 			</view>
 		</view>
-		<view class="on-line">
-			<view class="category" v-for="(index, item) in 5" :key="index">
+		<view class="on-line" v-else>
+			<view class="category" v-for="(item, index) in items" :key="index">
 				<view class="exam-title">
-					<text>大学生形式与政策课程 在线考试</text>
+					<text>{{item.examName}}</text>
 				</view>
 				<view class="subject">
 					<view class="nubber">
-						<text class="num">50</text>
+						<text class="num">{{item.examquestions.length}}</text>
 						<text class="txt">总题数</text>
 					</view>
 					<view class="nubber">
-						<text class="num">20</text>
+						<text class="num">{{$utils.QuestionCount(item.examquestions, "judge")}}</text>
 						<text class="txt">是非题</text>
 					</view>
 					<view class="nubber">
-						<text class="num">30</text>
+						<text class="num">{{$utils.QuestionCount(item.examquestions, "select")+$utils.QuestionCount(item.examquestions, "select")}}</text>
 						<text class="txt">选择题</text>
 					</view>
 				</view>
-
 				<view class="footer">
 					<view class="item" style="margin-left: 30rpx;">
 						<!-- <image src="../../static/data.svg" style="margin-right: 8rpx;" mode="aspectFit"></image> -->
 						<view class="date-icon"></view>
-						<text>2020-10-29 18:00</text>
+						<text>{{item.startTime}}</text>
 					</view>
 					<view class="item" style="padding-left: 30rpx;">
 						<!-- <image src="../../static/time.svg" style="margin-right: 8rpx;" mode="aspectFit"></image> -->
 						<view class="time-icon"></view>
-						<text>90分钟</text>
+						<text>{{$utils.showTime(item.duration)}}</text>
 					</view>
 					<view class="item" style="flex: 1;">
-						<view class="none-exam" style="float: right;">
+						<view v-if="item.isEnable=='0'&&item.isFinish=='0'" class="none-exam" style="float: right;">
 							<text class="txt">未考试</text>
 						</view>
-						<view class="finsh-exam" style="display: none;float: right;">
+						<view class="finsh-exam" v-if="item.isEnable=='1'&&item.isFinish=='1'" style="float: right;">
 							<text class="txt">已结束</text>
 						</view>
-						<view class="err-exam" style="display: none;float: right;">
-							<text class="txt">缺考</text>
+						<view class="err-exam" v-if="item.isEnable=='1'&&item.isFinish=='0'" style="float: right;">
+							<text class="txt">考试中</text>
 						</view>
 					</view>
 				</view>
 			</view>
-
 		</view>
 		<view class="footer-block"></view>
 	</view>
 </template>
 
 <script>
+	var _this
 	export default {
 		data() {
 			return {
-
+				keyword: "",
+				pageindex: 1,
+				pagesize: 1,
+				items: []
 			};
+		},
+		async onPullDownRefresh() {
+			this.pageindex = 1
+			await this.search()
+			uni.stopPullDownRefresh();
+		},
+		onReachBottom() {
+			this.search()
+		},
+		methods: {
+			async search() {
+				return await this.$api.SearchExamList({
+					keyword: _this.keyword,
+					pageindex: _this.pageindex,
+					pagesize: _this.pagesize
+				}).then(({
+					data
+				}) => {
+					if(_this.pageindex <= data.data.totalPages){
+						if (_this.pageindex == 1) {
+							_this.items = []
+						}
+						data.data.items.forEach((item) => {
+							_this.items.push(item)
+						})
+					}
+					_this.pageindex++
+				})
+			}
+		},
+		onLoad: function(e) {
+			_this = this
+			const eventChannel = this.getOpenerEventChannel()
+			eventChannel.on('onSearch', function(data) {
+				_this.keyword = data.keyword
+				_this.search()
+			})
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.box {
-		background: #F5F6F7;
-		min-height: 100vh;
-	}
-	
-	.tabs{
-		position: fixed;
-		top: calc(100rpx+84rpx);
+	.search-none {
+		margin: 0;
+		padding: 0;
 		width: 100vw;
+		height: 288rpx;
+		display: flex;
+		padding-top: 200rpx;
+		justify-content: center;
+
+		.search-none-icon {
+			width: 538rpx;
+			height: 288rpx;
+			background-image: url(../../static/search-none.svg);
+			background-repeat: no-repeat;
+			background-size: 538rpx 288rpx;
+		}
 	}
 	.progress {
 		display: flex;
@@ -88,6 +127,7 @@
 		align-items: center;
 		background-color: #FFFFFF;
 		height: 84rpx;
+
 		.active {
 			text {
 				color: #1677FF !important;
@@ -184,7 +224,7 @@
 	.on-line {
 		padding-left: 30rpx;
 		padding-right: 30rpx;
-		margin-top: 120rpx;
+		padding-top: 30rpx;
 	}
 
 	.category {
@@ -276,6 +316,7 @@
 		.exam-title {
 			margin: 0 30rpx;
 			border-bottom: 2rpx solid #f7f7f7;
+
 			text {
 				width: 630rpx;
 				height: 82rpx;
