@@ -59,9 +59,9 @@
 		data() {
 			return {
 				tabs: [{
-					name: '考试中'
-				}, {
 					name: '未考试'
+				}, {
+					name: '考试中'
 				}, {
 					name: '已结束',
 				}],
@@ -86,7 +86,7 @@
 		},
 		methods: {
 			async getItems(){
-				if(this.current==0){
+				if(this.current==1){
 					return await this.$api.GetExamOnlineList({
 						pageindex: _this.pageindex,
 						pagesize: _this.pagesize
@@ -103,7 +103,7 @@
 						}
 						_this.pageindex++
 					})
-				}else if(this.current==1){
+				}else if(this.current==0){
 					return await this.$api.GetExamWaitList({
 						pageindex: _this.pageindex,
 						pagesize: _this.pagesize
