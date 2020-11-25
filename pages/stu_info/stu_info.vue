@@ -4,11 +4,8 @@
 		<!-- <u-select v-model="showSex" :safe-area-inset-bottom="true" :mask-close-able="false" title="请选择性别" @cancel="cancelChoose"
 		 @confirm="chooseSex" :list="sexList"></u-select> -->
 
-		<cu-custom bgColor="bg-whites" :isBack="true">
-			<block slot="backText"></block>
-			<block slot="content">修改资料</block>
-		</cu-custom>
 
+		<u-navbar title="修改资料"></u-navbar>
 		<view class="content">
 
 			<!-- 主体 -->
@@ -75,9 +72,13 @@
 	import wInput from '../../components/watch-login/watch-input.vue' //input
 	import wButton from '../../components/watch-login/watch-button.vue' //button
 	import {
-		showModal, Validation, showToast
+		showModal,
+		Validation,
+		showToast
 	} from '../../utils'
-  import {mapActions} from 'vuex'
+	import {
+		mapActions
+	} from 'vuex'
 	export default {
 		async onLoad() {
 			await this.$store.dispatch('student/getStudentInfo')
@@ -89,10 +90,10 @@
 		data() {
 			return {
 				StuName: "",
-				Telphone:"",
+				Telphone: "",
 				Password: '', //密码
-				IdCard:"男",
-				Sex:"",
+				IdCard: "男",
+				Sex: "",
 				isRotate: false, //是否加载旋转
 				showSex: false,
 				sexList: ['男', '女', '保密'],
@@ -106,7 +107,7 @@
 			_this = this
 		},
 		methods: {
-			...mapActions('student',['getStudentInfo']),
+			...mapActions('student', ['getStudentInfo']),
 			async startREdit() {
 				//注册
 				if (this.isRotate) {
@@ -117,7 +118,7 @@
 				var stuName = this.StuName
 				var telphone = this.Telphone
 				var idCard = this.IdCard
-				var sex = this.Sex=="男" ? "0" : this.Sex=="女"? "1" : "2"
+				var sex = this.Sex == "男" ? "0" : this.Sex == "女" ? "1" : "2"
 				if (!stuName) {
 					showModal({
 						content: '请输入姓名',
@@ -138,17 +139,25 @@
 				}
 				this.isRotate = true
 				await this.$api.EditStudentInfo({
-					stuName,sex,telphone,password,idCard
-				}).then(({data})=>{
+					stuName,
+					sex,
+					telphone,
+					password,
+					idCard
+				}).then(({
+					data
+				}) => {
 					_this.getStudentInfo()
 					return showToast({
-						type:"success",
-						msg:"修改成功"
+						type: "success",
+						msg: "修改成功"
 					})
-				}).catch(({errors})=>{
+				}).catch(({
+					errors
+				}) => {
 					return Validation(errors)
 				})
-				setTimeout(function(){
+				setTimeout(function() {
 					_this.isRotate = false
 				}, 500)
 			}

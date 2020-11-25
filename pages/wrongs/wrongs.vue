@@ -29,7 +29,7 @@
 	export default {
 		data() {
 			return {
-				title: '',
+				title: '全部错题',
 				pageindex: 1,
 				pagesize: 1,
 				items: []
@@ -99,10 +99,12 @@
 		},
 		onLoad(e) {
 			_this = this
-			this.title = e.title ? e.title : "全部错题"
+			var title = e.title ? e.title : "全部错题"
+			console.log(title)
 			uni.setNavigationBarTitle({
-				title: this.title
+				title: title
 			})
+			this.title = title
 			this.getItems()
 		}
 	}

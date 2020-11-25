@@ -1,11 +1,6 @@
 <template>
   <view class="forget">
-    <cu-custom bgColor="bg-whites"
-               :isBack="true">
-      <block slot="backText"></block>
-      <block slot="content">找回密码</block>
-    </cu-custom>
-
+		<u-navbar title="找回密码"></u-navbar>
     <view class="content">
       <!-- 主体 -->
       <view class="main">

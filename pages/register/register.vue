@@ -6,11 +6,8 @@
 		<u-select v-model="showDeptClass" :safe-area-inset-bottom="true" :mask-close-able="false" :list="deptClassList" title="请选择班级"
 		 @cancel="cancelChoose" @confirm="chooseDeptClass" mode="mutil-column-auto"></u-select>
 
-		<cu-custom bgColor="bg-whites" :isBack="true">
-			<block slot="backText"></block>
-			<block slot="content">注册</block>
-		</cu-custom>
-
+		<u-navbar title="注册"></u-navbar>
+			
 		<view class="content">
 
 			<!-- 主体 -->

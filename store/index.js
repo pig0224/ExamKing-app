@@ -5,13 +5,25 @@ import student from './modules/student'
 
 Vue.use(Vuex)
 
-const state = {}
+const state = {
+	request_number:0
+}
 
-const mutations = {}
+const mutations = {
+	setRequestNumber(state, num) {
+		state.request_number = num
+	}
+}
 
-const actions = {}
+const actions = {
+	requestNumber({commit}, num){
+		commit('setRequestNumber', num)
+	}
+}
 
-const getters = {}
+const getters = {
+	request_number: state => state.request_number,
+}
 
 const store = new Vuex.Store({
   state,

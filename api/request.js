@@ -20,31 +20,23 @@ var Header = {
 }
 
 const _showLoading = function() {
-	var request_number = getStorage("request_number")
-	var new_req_num = request_number == "" ? 1 : (parseInt(request_number) + 1)
-	uni.setStorage({
-		key: 'request_number',
-		data: new_req_num,
-		success: function() {
-			if (parseInt(new_req_num) == 1) {
-				showLoading()
-			}
-		}
-	});
+	var request_number = store.getters.request_number
+	var new_req_num = request_number + 1
+	store.dispatch('requestNumber', new_req_num)
+	if (new_req_num == 1) {
+		showLoading()
+	}
 }
 
 const _hideLoading = function() {
-	var request_number = getStorage("request_number")
-	var new_req_num = request_number == "" ? 0 : (parseInt(request_number) - 1)
-	uni.setStorage({
-		key: 'request_number',
-		data: new_req_num,
-		success: function() {
-			if (parseInt(new_req_num) == 0) {
-				hideLoading()
-			}
+	setTimeout(function() {
+		var request_number = store.getters.request_number
+		var new_req_num = (request_number - 1) <= 0 ? 0 : (request_number - 1)
+		store.dispatch('requestNumber', new_req_num)
+		if (new_req_num <= 0) {
+			hideLoading()
 		}
-	});
+	}, 100)
 }
 
 const UnauthorizedToLogout = function() {

@@ -3,15 +3,14 @@
 			"path": "pages/index/index",
 			"style": {
 				"enablePullDownRefresh": true,
+				"navigationStyle": "custom",
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
-						"color": "#9237e3"
+						"color": "#9237e3",
+						"bounce": "none",
+						"titleNView": false
 					}
-				},
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": false
 				}
 			}
 		},
@@ -19,66 +18,54 @@
 			"path": "pages/login/login",
 			"style": {
 				"enablePullDownRefresh": false,
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": false
-				}
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/error/error",
 			"style": {
 				"enablePullDownRefresh": false,
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": false
-				}
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/register/register",
 			"style": {
 				"enablePullDownRefresh": false,
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": false
-				}
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/forget/forget",
 			"style": {
 				"enablePullDownRefresh": false,
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": false
-				}
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/exam_start/exam_start",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/exam_result/exam_result",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/stu_info/stu_info",
 			"style": {
 				"enablePullDownRefresh": false,
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": false
-				}
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/all_exam/all_exam",
 			"style": {
 				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "全部考试",
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
@@ -89,7 +76,8 @@
 		}, {
 			"path": "pages/exam_detail/exam_detail",
 			"style": {
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/wrongs/wrongs",
@@ -119,10 +107,7 @@
 			"path": "pages/wrong_details/wrong_details",
 			"style": {
 				"enablePullDownRefresh": false,
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": false
-				}
+				"navigationStyle": "custom"
 			}
 
 		}
@@ -130,7 +115,8 @@
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#ffffff",
 		"navigationBarTextStyle": "black",
-		"backgroundColor": "#F5F6F7"
+		"backgroundColor": "#F5F6F7",
+		"disableScroll": true
 	},
 	"usingComponts": true,
 	"easycom": {

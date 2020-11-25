@@ -1,10 +1,9 @@
 <template>
 	<view class="exam">
-		<cu-custom
-		 bgColor="white-header"
-		 :isBack="true">
-			<block slot="backText"></block>
-		</cu-custom>
+		<u-navbar 
+		:background="{background:'#44a7fc'}" 
+		:border-bottom="false" 
+		back-icon-color="#fff"></u-navbar>
 		<view class="a">
 			<view class="aa">
 				<text>92</text>

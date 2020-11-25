@@ -1,13 +1,13 @@
 <template>
 	<view class="exam-detail">
-		<cu-custom bgColor="bg-white">
-			<block slot="right">
-				<text class="exam-exit">退出</text>
-			</block>
-			<block slot="right">
+		<u-navbar title="" :is-back="false" :border-bottom="false">
+			<view class="slot-wrap">
+				<view class="exam-exit" @click="$utils.Back()">
+					<text>退出</text>
+				</view>
 				<view class="right_app" @click="openapp"></view>
-			</block>
-		</cu-custom>
+			</view>
+		</u-navbar>
 
 		<u-popup v-model="showApp" mode="top" border-radius="20">
 			<view class="header-block"></view>
@@ -121,6 +121,29 @@
 	}
 </script>
 <style lang="scss" scoped>
+	.slot-wrap {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 40rpx;
+			flex: 1;
+			.exam-exit {
+				font-size: 36rpx;
+				font-family: PingFangSC, PingFangSC-Regular;
+				font-weight: 400;
+				text-align: left;
+				color: #333333;
+				line-height: 48rpx;
+			}
+			.right_app {
+				background: url(../../static/exam_app.svg);
+				background-repeat: no-repeat;
+				background-size: 100%;
+				height: 49rpx;
+				width: 49rpx;
+			}
+			
+		}
 	.app-content{
 		margin: 0 40rpx 25rpx 40rpx;
 		.exam-btn{
@@ -296,29 +319,7 @@
 		}
 	}
 
-	.exam-exit {
-		width: 68rpx;
-		height: 48rpx;
-		font-size: 34rpx;
-		font-family: PingFangSC, PingFangSC-Regular;
-		font-weight: 400;
-		text-align: left;
-		color: #333333;
-		line-height: 48rpx;
-		position: relative;
-		left: 40rpx;
-	}
-
-	.right_app {
-		background: url(../../static/exam_app.svg);
-		background-repeat: no-repeat;
-		background-size: 100%;
-		height: 49rpx;
-		width: 49rpx;
-		position: relative;
-		right: 40rpx;
-	}
-
+	
 	.exam-detail {
 		background: #fff;
 		height: 100vh;

@@ -1,17 +1,7 @@
 <template>
 	<view class="box">
-		<cu-custom bgColor="bg-white" :isBack="true">
-			<block slot="backText"></block>
-			<block slot="content">全部考试</block>
-		</cu-custom>
-		<view class="tabs">
-			<view class="progress">
-				<view class="text active"><text>考试中</text></view>
-				<view class="text"><text>未考试</text></view>
-				<view class="text"><text>已考试</text></view>
-			</view>
-		</view>
-		<view class="on-line">
+		<u-tabs :list="tabs" :is-scroll="false" :current="current" @change="changeTab"></u-tabs>
+		<view class="on-line" style="padding-top: 30rpx;">
 			<view class="category" v-for="(index, item) in 5" :key="index">
 				<view class="exam-title">
 					<text>大学生形式与政策课程 在线考试</text>
@@ -65,8 +55,20 @@
 	export default {
 		data() {
 			return {
-
+				tabs: [{
+					name: '考试中'
+				}, {
+					name: '未考试'
+				}, {
+					name: '已结束',
+				}],
+				current: 0
 			};
+		},
+		methods:{
+			changeTab(index){
+				this.current = index
+			}
 		}
 	}
 </script>
@@ -74,42 +76,6 @@
 <style lang="scss" scoped>
 	.box {
 		background: #F5F6F7;
-		min-height: 100vh;
-	}
-	
-	.tabs{
-		position: fixed;
-		top: calc(100rpx+84rpx);
-		width: 100vw;
-	}
-	.progress {
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		background-color: #FFFFFF;
-		height: 84rpx;
-		.active {
-			text {
-				color: #1677FF !important;
-			}
-
-			border-bottom: 4rpx solid #1677FF;
-		}
-
-		.text {
-			text-align: center;
-			height: 84rpx;
-
-			text {
-				width: 102rpx;
-				height: 48rpx;
-				font-size: 28rpx;
-				font-family: PingFangSC, PingFangSC-Regular;
-				text-align: center;
-				color: #333333;
-				line-height: 84rpx;
-			}
-		}
 	}
 
 	.finsh-exam {
@@ -184,7 +150,6 @@
 	.on-line {
 		padding-left: 30rpx;
 		padding-right: 30rpx;
-		margin-top: 120rpx;
 	}
 
 	.category {
@@ -276,6 +241,7 @@
 		.exam-title {
 			margin: 0 30rpx;
 			border-bottom: 2rpx solid #f7f7f7;
+
 			text {
 				width: 630rpx;
 				height: 82rpx;

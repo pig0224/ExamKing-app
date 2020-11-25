@@ -100,8 +100,6 @@ const actions = {
 				commit('setIdCard', data.data.idCard)
 				commit('setClasses', data.data.classes)
 				return Promise.resolve(data)
-			}else{
-				dispatch('Logout')
 			}
 		})
 	},
@@ -124,7 +122,12 @@ const actions = {
 		commit('setClasses', "")
 		// reLaunch登录页面
 		uni.reLaunch({
-			url: '/pages/login/login'
+			url: '/pages/login/login',
+			complete: function(){
+				// #ifdef APP-PLUS  
+				plus.navigator.closeSplashscreen()
+				// #endif
+			}
 		});
 	}
 }

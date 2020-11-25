@@ -1,11 +1,8 @@
 <template>
 	<view>
 		<view class="box">
-			<cu-custom bgColor="wrong-header-bg" :isBack="true">
-				<block slot="backText"></block>
-				<block slot="content">错题本</block>
-			</cu-custom>
-
+			
+			<u-navbar title="错题本"></u-navbar>
 			<view class="image-header">
 				<image src="../../static/wrong_bg.png" mode="widthFix"></image>
 			</view>

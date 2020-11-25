@@ -262,9 +262,12 @@
 				})
 			}
 		},
-		onShow() {
+		async onShow() {
 			this.searchKeyword = ''
-			this.init()
+			await this.init()
+			// #ifdef APP-PLUS  
+			plus.navigator.closeSplashscreen()
+			// #endif
 		}
 	}
 </script>
@@ -401,6 +404,10 @@
 				position: absolute;
 				right: 20rpx;
 				top: 74rpx;
+				image{
+					width: 40rpx;
+					height: 42rpx;
+				}
 			}
 		}
 	}
