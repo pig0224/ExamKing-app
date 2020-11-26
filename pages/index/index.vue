@@ -87,7 +87,7 @@
 					<text class="title">
 						今日成绩
 					</text>
-					<text class="more">更多</text>
+					<text class="more" @click="$utils.href('/pages/score_list/score_list')">更多</text>
 				</view>
 
 				<view class="today-chengji" v-if="ExamScore!=''">
@@ -155,7 +155,7 @@
 					</view>
 				</view>
 
-				<view class="item">
+				<view class="item" @click="$utils.href('/pages/score_list/score_list')">
 					<view class="item-active"></view>
 					<view class="conetnt">
 						<view class="icon">

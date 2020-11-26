@@ -118,6 +118,19 @@
 				"navigationStyle": "custom"
 			}
 
+		}, {
+			"path": "pages/score_list/score_list",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "我的成绩",
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"color": "rgb(41, 121, 255)"
+					}
+				}
+			}
+
 		}
 	],
 	"globalStyle": {
