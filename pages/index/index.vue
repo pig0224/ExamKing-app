@@ -238,12 +238,7 @@
 			...mapActions('student', ['Logout']),
 			goExamResult(item) {
 				uni.navigateTo({
-					url: '/pages/exam_result/exam_result',
-					success: function(res) {
-						res.eventChannel.emit('onExamDetail', {
-							detail: item
-						})
-					}
+					url: '/pages/exam_result/exam_result?id='+item.id
 				})
 			},
 			goExamDetail(item) {

@@ -1,51 +1,92 @@
 <template>
 	<view class="exam">
-		<u-navbar 
-		:background="{background:'#44a7fc'}" 
-		:border-bottom="false" 
-		back-icon-color="#fff"></u-navbar>
-		<view class="a">
-			<view class="aa">
-				<text>92</text>
-				<text class="fen">分</text>
+		<u-navbar :background="{background:'#44a7fc'}" :border-bottom="false" back-icon-color="#fff"></u-navbar>
+		<view v-show="score!=''">
+			<view class="a">
+				<view class="aa">
+					<text>{{score.score}}</text>
+					<text class="fen">分</text>
+				</view>
 			</view>
-		</view>
-		<view class="b">
-			<p>本次考试成绩</p>
-		</view>
-		<view class="c">
-			<view class="div1">
-				<text class="d1">92</text>
-				<text class="div_1">%</text>
-				<view class="p"><text>正确率</text></view>
+			<view class="b">
+				<p>本次考试成绩</p>
 			</view>
-			<view class="div1">
-				<text class="d2">20</text>
-				<text class="div_2">min</text>
-				<view class="p"><text>考试用时</text></view>
+			<view class="c" v-show="exam!=''">
+				<view class="div1">
+					<text class="d1">{{suc}}</text>
+					<text class="div_1">%</text>
+					<view class="p"><text>正确率</text></view>
+				</view>
+				<view class="div1">
+					<text class="d1">{{useTime}}</text>
+					<text class="div_1">min</text>
+					<view class="p"><text>考试用时</text></view>
+				</view>
+				<view class="div1">
+					<text class="d1">{{err}}</text>
+					<text class="div_1">题</text>
+					<view class="p"><text>错题数</text></view>
+				</view>
 			</view>
-			<view class="div1">
-				<text class="d3">92</text>
-				<text class="div_3">题</text>
-				<view class="p"><text>错题数</text></view>
+			<view class="d">
+				<u-button class="button" @click="goExamDetail">查看详情</u-button>
 			</view>
-		</view>
-		<view class="d">
-			<u-button class="button">查看详情</u-button>
+
 		</view>
 	</view>
 
 </template>
 
 <script>
+	var _this
 	export default {
 		data() {
 			return {
-
+				score: "",
+				exam: "",
+				useTime: "0",
+				suc: "0",
+				err: "0"
 			}
 		},
 		methods: {
-
+			goExamDetail() {
+				uni.navigateTo({
+					url: '/pages/exam_detail/exam_detail',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: _this.exam
+						})
+					}
+				})
+			},
+		},
+		async onLoad(e) {
+			_this = this
+			var id = e.id
+			this.$api.GetExamScore(id).then(({
+				data
+			}) => {
+				_this.score = data.data
+			}).catch((err) => {
+				console.log(err)
+			})
+			this.$api.GetExamInfo(id).then(({
+				data
+			}) => {
+				_this.exam = data.data
+				// 计算正确率
+				var sucNum = _this.$utils.QuestionAnswerCount(data.data.stuanswerdetails, "1")
+				_this.suc = _this.$utils.QuestionPercent(data.data.examquestions.length, sucNum).split("%")[0].split(".")[0]
+				_this.err = _this.$utils.QuestionAnswerCount(data.data.stuanswerdetails, "0")
+				// 计算用时多少分钟
+				var startTime = new Date(_this.exam.startTime.replace(/-/g, '/'))
+				var paperTime = new Date(_this.score.createTime.replace(/-/g, '/'))
+				var useTime = (paperTime.getTime() - paperTime.getTime()) / 6000
+				_this.useTime = parseInt(useTime)
+			}).catch((err) => {
+				console.log(err)
+			})
 		}
 	}
 </script>
@@ -115,7 +156,8 @@
 		height: 194rpx;
 		//display: flex;
 		float: left;
-		.p{
+
+		.p {
 			text-align: center;
 		}
 	}
@@ -140,7 +182,7 @@
 		text-align: left;
 		color: #ffffff;
 		line-height: 88rpx;
-		
+
 	}
 
 	.p {
@@ -151,16 +193,17 @@
 		color: #ffffff;
 		line-height: 40rpx;
 	}
-	
-	.div2{
-		
-			width: 180rpx;
-			height: 194rpx;
-			
-			float: left;
-		
+
+	.div2 {
+
+		width: 180rpx;
+		height: 194rpx;
+
+		float: left;
+
 	}
-	.d2{
+
+	.d2 {
 		width: 58rpx;
 		height: 66rpx;
 		font-size: 48rpx;
@@ -170,7 +213,8 @@
 		color: #ffffff;
 		line-height: 66rpx;
 	}
-	.div_2{
+
+	.div_2 {
 		width: 48rpx;
 		height: 40rpx;
 		font-size: 28rpx;
@@ -180,7 +224,8 @@
 		color: #ffffff;
 		line-height: 88rpx;
 	}
-	.p2{
+
+	.p2 {
 		width: 112rpx;
 		height: 40rpx;
 		font-size: 28rpx;
@@ -191,15 +236,15 @@
 		line-height: 40rpx;
 		margin-top: 8rpx;
 	}
-	
+
 	.div3 {
 		width: 180rpx;
 		height: 194rpx;
 		//display: flex;
 		float: left;
-		
+
 	}
-	
+
 	.d3 {
 		width: 58rpx;
 		height: 66rpx;
@@ -210,7 +255,7 @@
 		color: #ffffff;
 		line-height: 66rpx;
 	}
-	
+
 	.div_3 {
 		width: 28rpx;
 		height: 40rpx;
@@ -220,9 +265,9 @@
 		text-align: left;
 		color: #ffffff;
 		line-height: 88rpx;
-		
+
 	}
-	
+
 	.p3 {
 		width: 84rpx;
 		height: 40rpx;
@@ -233,15 +278,16 @@
 		color: #ffffff;
 		line-height: 55rpx;
 	}
-	
-	.d{
+
+	.d {
 		width: 540rpx;
 		height: 80rpx;
 		background: #ffffff;
 		border-radius: 8rpx;
 		margin: auto;
 	}
-	.button{
+
+	.button {
 		margin-top: 28rpx;
 		margin-bottom: 18rpx;
 		// width: 128rpx;
@@ -252,7 +298,6 @@
 		text-align: left;
 		color: #44a7fc;
 		line-height: 44rpx;
-	
+
 	}
-	
 </style>

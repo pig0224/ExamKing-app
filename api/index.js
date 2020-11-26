@@ -178,3 +178,18 @@ export const GetExamJudge = (examid, id) => {
 export const ExamAnswer = (data) => {
 	return request.Post('exam/exam-answer', data)
 }
+
+// 交卷
+export const ExamPaper = (id) =>{
+	return request.Post(`exam/exam-paper/${id}`)
+}
+
+// 查询考试成绩
+export const GetExamScore = (examid) => {
+	return request.Get(`score/exam-score/${examid}`)
+}
+
+// 查询成绩列表
+export const GetExamScoreList = (query) => {
+	return request.Get('score/exam-score-list', query)
+}

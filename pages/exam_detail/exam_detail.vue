@@ -1,6 +1,7 @@
 <template>
 	<view class="exam-detail">
-		<u-navbar title="" v-if="detail.isEnable=='1'&&detail.isFinish=='0'" :is-back="false" :border-bottom="false">
+		<u-navbar title="" v-if="detail.isEnable=='1'&&detail.isFinish=='0'&&detail.stuscores.length==0" :is-back="false"
+		 :border-bottom="false">
 			<view class="slot-wrap">
 				<view class="exam-exit" @click="exitExam">
 					<text>退出</text>
@@ -32,12 +33,12 @@
 					</view>
 				</view>
 				<view class="exam-btn">
-					<button class="exam-sumbit"><text>交 卷</text></button>
+					<button class="exam-sumbit" @click="submitExam"><text>交 卷</text></button>
 				</view>
 			</view>
 		</u-popup>
 
-		<view v-if="detail.isEnable=='1'&&detail.isFinish=='0'">
+		<view v-if="detail.isEnable=='1'&&detail.isFinish=='0'&&detail.stuscores.length==0">
 			<view class="time-header" v-show="detail!=''">
 				<view class="time-left">
 					<text>剩余时间</text>
@@ -67,9 +68,34 @@
 			<view class="line">
 			</view>
 		</view>
-		<uni-transition :mode-class="['slide-right']" :show="showQuestion" :duration="500">
+
+		<view class="" v-else>
+			<view v-show="question!=''">
+				<view class="exam-header" v-show="detail!=''">
+					<view class="exam-title">
+						<text v-if="question.questionType=='select'">
+							【多选题】{{question.select.question}}
+						</text>
+						<text v-if="question.questionType=='single'">
+							【单选题】{{question.single.question}}
+						</text>
+						<text v-if="question.questionType=='judge'">
+							【是非题】{{question.judge.question}}
+						</text>
+					</view>
+					<view class="time-right">
+						<text class="that-num">{{nowQuestionNum}}</text>
+						<text class="count">/ {{QuestionCount}}</text>
+					</view>
+				</view>
+				<view class="line">
+				</view>
+			</view>
+		</view>
+
+		<uni-transition :mode-class="['slide-right']" :show="showQuestion">
 			<view class="box" v-if="showQuestion">
-				<view class="text-header">
+				<view class="text-header" v-show="detail.stuscores.lengt==0">
 					<text v-if="question.questionType=='select'">
 						【多选题】{{question.select.question}}
 					</text>
@@ -137,7 +163,7 @@
 				</view>
 			</view>
 		</uni-transition>
-		
+
 		<view class="footer" v-show="detail!=''">
 			<view class="footer-content">
 				<view class="footer-left">
@@ -167,6 +193,7 @@
 			<view class="ideas-content">
 				<text>{{ideas}}</text>
 			</view>
+			<view class="footer-block"></view>
 		</u-popup>
 		<view class="footer-block"></view>
 	</view>
@@ -206,13 +233,13 @@
 				showIdeas: false,
 				showQuestion: false,
 				ideas: "",
-				isAnswer: false ,//是否可以继续答题
+				isAnswer: false, //是否可以继续答题
 			};
 		},
 		watch: {
 			question(val) {
 				// 显示题目
-				setTimeout(function(){
+				setTimeout(function() {
 					_this.showQuestion = true
 					// 获取已答题信息
 					if (val.stuanswerdetail != null) {
@@ -250,6 +277,18 @@
 			}
 		},
 		methods: {
+			async submitExam() {
+				await this.$api.ExamPaper(_this.detail.id).then(({
+					data
+				}) => {
+					var score = data.data
+					uni.redirectTo({
+						url: '/pages/exam_result/exam_result?id=' + _this.detail.id
+					})
+				}).catch((err) => {
+					console.log(err)
+				})
+			},
 			async getQuestion(question) {
 				switch (question.questionType) {
 					case "select":
@@ -266,6 +305,7 @@
 			goQuestion(index) {
 				this.nowQuestionNum = index + 1
 				this.showApp = false
+				
 			},
 			async selectOption(e) {
 				if (this.detail.isEnable == '1' && this.detail.isFinish == '0' && this.isAnswer == true) {
@@ -300,7 +340,8 @@
 				}
 			},
 			async answerQuestion() {
-				if (this.answer.length > 0 && this.detail.isEnable == '1' && this.detail.isFinish == '0' && this.isAnswer == true) {
+				if (this.answer.length > 0 && this.detail.isEnable == '1' && this.detail.isFinish == '0' && this.isAnswer == true &&
+					detail.stuscores.length == 0) {
 					return await this.$api.ExamAnswer({
 						questionId: this.question.id,
 						answer: this.answer
@@ -317,7 +358,7 @@
 							_this.wrongNum = _this.wrongNum + 1
 							_this.questionDic[_this.nowQuestionNum - 1].status = "err"
 						}
-					}).catch((err)=>{
+					}).catch((err) => {
 						console.log(err)
 					})
 				}
@@ -336,7 +377,9 @@
 				await this.answerQuestion()
 				// 判断是否是最后一题提交
 				if (nextNum > this.questions.length) { // 最后一题处理
-					this.showApp = true
+					if(_this.detail.stuscores.length==0){
+						this.showApp = true
+					}
 					return false
 				} else {
 					this.nowQuestionNum = nextNum
@@ -364,32 +407,34 @@
 				})
 			},
 			showTime() {
-				var nowtime = new Date(), //获取当前时间
-					endtime = new Date(this.detail.endTime.replace(/-/g, '/')); //定义结束时间
-				var lefttime = endtime.getTime() - nowtime.getTime(), //距离结束时间的毫秒数
-					lefth = Math.floor(lefttime / (1000 * 60 * 60) % 24), //计算小时数
-					leftm = Math.floor(lefttime / (1000 * 60) % 60), //计算分钟数
-					lefts = Math.floor(lefttime / 1000 % 60); //计算秒数
-				this.examTime.hour = this.$utils.addPreZero(lefth);
-				this.examTime.min = this.$utils.addPreZero(leftm);
-				this.examTime.second = this.$utils.addPreZero(lefts);
+				try {
+					var nowtime = new Date(), //获取当前时间
+						endtime = new Date(this.detail.endTime.replace(/-/g, '/')); //定义结束时间
+					var lefttime = endtime.getTime() - nowtime.getTime(), //距离结束时间的毫秒数
+						lefth = Math.floor(lefttime / (1000 * 60 * 60) % 24), //计算小时数
+						leftm = Math.floor(lefttime / (1000 * 60) % 60), //计算分钟数
+						lefts = Math.floor(lefttime / 1000 % 60); //计算秒数
+					this.examTime.hour = this.$utils.addPreZero(lefth);
+					this.examTime.min = this.$utils.addPreZero(leftm);
+					this.examTime.second = this.$utils.addPreZero(lefts);
+				} catch (err) {
+					console.log(err)
+				}
 			},
 			exitExam() {
 				showModal({
 					title: "提示",
-					content: "退出将无法重新考试",
+					content: "退出将立即交卷",
 					showCancel: true,
-					success: function(res) {
+					success: async function(res) {
 						if (res.confirm) {
-							uni.reLaunch({
-								url: "/pages/index/index"
-							})
+							await _this.submitExam()
 						}
 					}
 				})
 			},
 			onShowIdeas() {
-				var id = this.question.id
+				var id = this.question.questionId
 				var questiontype = this.question.questionType
 				this.$api.GetQuestionIdeas({
 					id,
@@ -438,27 +483,96 @@
 						})
 					})
 					var lastQuestionNum = _this.questions.length
-					// 获取最后一个答题位置
-					for (var i = 0; i < _this.questionDic.length; i++) {
-						if (_this.questionDic[i].status == 'none') { //存在已经答题
-							lastQuestionNum = i + 1
-							break;
+					if(_this.detail.stuscores.length==0){
+						// 获取最后一个答题位置
+						for (var i = 0; i < _this.questionDic.length; i++) {
+							if (_this.questionDic[i].status == 'none') { //存在已经答题
+								lastQuestionNum = i + 1
+								break;
+							}
 						}
+					}else{
+						lastQuestionNum = 1
 					}
 					_this.nowQuestionNum = lastQuestionNum
 				} else {
 					_this.nowQuestionNum = 1
 				}
-				_this.showTime()
-				// 开始考试倒计时
-				setInterval(function() {
+				if(_this.detail.stuscores.length==0){
 					_this.showTime()
-				}, 1000);
+					// 开始考试倒计时
+					setInterval(function() {
+						_this.showTime()
+					}, 1000);
+				}
 			})
 		}
 	}
 </script>
 <style lang="scss" scoped>
+	.ideas-line {
+		margin: 25rpx auto 25rpx auto;
+		width: 200rpx;
+		height: 8rpx;
+		background: rgba(216, 216, 216, 0.6);
+		border-radius: 6rpx;
+	}
+	
+	.ideas-content {
+		padding: 0 60rpx 30rpx 60rpx;
+	
+		text {
+			font-size: 40rpx;
+			font-family: PingFangSC, PingFangSC-Regular;
+			font-weight: 400;
+			text-align: center;
+			color: #666666;
+			line-height: 56rpx;
+		}
+	}
+	.exam-header{
+		padding: 40rpx;
+		position: relative;
+		.time-right{
+			position: absolute;
+			right: 30rpx;
+			bottom: 10rpx;
+			.that-num{
+				width: 48rpx;
+				height: 56rpx;
+				font-size: 40rpx;
+				font-family: PingFangSC, PingFangSC-Semibold;
+				font-weight: 600;
+				text-align: center;
+				color: #333333;
+				line-height: 56rpx;
+			}
+			.count{
+				padding-left: 10rpx;
+				width: 48rpx;
+				height: 40rpx;
+				font-size: 28rpx;
+				font-family: PingFangSC, PingFangSC-Regular;
+				font-weight: 400;
+				text-align: center;
+				color: #cccccc;
+				line-height: 40rpx;
+			}
+		}
+		.exam-title{
+			text-align: left;
+			text{
+				width: 670rpx;
+				height: 100rpx;
+				font-size: 36rpx;
+				font-family: PingFangSC, PingFangSC-Regular;
+				font-weight: 400;
+				text-align: left;
+				color: #333333;
+				line-height: 50rpx;
+			}
+		}
+	}
 	.question-answer {
 		padding: 30rpx;
 
