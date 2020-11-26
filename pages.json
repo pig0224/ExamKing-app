@@ -4,7 +4,7 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationStyle": "custom",
-				"disableScroll": false,
+				"disableScroll": true,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
@@ -19,6 +19,7 @@
 			"path": "pages/login/login",
 			"style": {
 				"enablePullDownRefresh": false,
+				"disableScroll": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -26,6 +27,7 @@
 			"path": "pages/error/error",
 			"style": {
 				"enablePullDownRefresh": false,
+				"disableScroll": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -33,6 +35,7 @@
 			"path": "pages/register/register",
 			"style": {
 				"enablePullDownRefresh": false,
+				"disableScroll": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -40,6 +43,7 @@
 			"path": "pages/forget/forget",
 			"style": {
 				"enablePullDownRefresh": false,
+				"disableScroll": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -47,6 +51,7 @@
 			"path": "pages/exam_start/exam_start",
 			"style": {
 				"enablePullDownRefresh": false,
+				"disableScroll": true,
 				"navigationStyle": "custom"
 			}
 		},
@@ -54,6 +59,7 @@
 			"path": "pages/exam_result/exam_result",
 			"style": {
 				"enablePullDownRefresh": false,
+				"disableScroll": true,
 				"navigationStyle": "custom"
 			}
 		}, {
@@ -67,7 +73,6 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "全部考试",
-				"disableScroll": false,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
@@ -79,13 +84,13 @@
 			"path": "pages/exam_detail/exam_detail",
 			"style": {
 				"enablePullDownRefresh": false,
+				"disableScroll": true,
 				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/wrongs/wrongs",
 			"style": {
 				"enablePullDownRefresh": true,
-				"disableScroll": false,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
@@ -99,7 +104,6 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarTitleText": "搜索结果",
-				"disableScroll": false,
 				"app-plus": {
 					"pullToRefresh": {
 						"support": true,
@@ -120,7 +124,7 @@
 		"navigationBarBackgroundColor": "#ffffff",
 		"navigationBarTextStyle": "black",
 		"backgroundColor": "#F5F6F7",
-		"disableScroll": true
+		"disableScroll": false
 	},
 	"usingComponts": true,
 	"easycom": {

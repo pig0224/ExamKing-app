@@ -1,11 +1,18 @@
 <template>
 	<view class="exam-detail">
-		<u-navbar title="" :is-back="false" :border-bottom="false">
+		<u-navbar title="" v-if="detail.isEnable=='1'&&detail.isFinish=='0'" :is-back="false" :border-bottom="false">
 			<view class="slot-wrap">
-				<view class="exam-exit" @click="$utils.Back()">
+				<view class="exam-exit" @click="exitExam">
 					<text>退出</text>
 				</view>
 				<view class="right_app" @click="openapp"></view>
+			</view>
+		</u-navbar>
+		<u-navbar v-else :title="detail.examName">
+			<view slot="right">
+				<view class="show-ideas" @click="onShowIdeas">
+					<text>分析</text>
+				</view>
 			</view>
 		</u-navbar>
 
@@ -19,14 +26,9 @@
 					<view class="close-app" @click="closeapp"></view>
 				</view>
 				<view class="datilist">
-					<view class="dati-item dati-suc">
-						<text>1</text>
-					</view>
-					<view class="dati-item dati-err">
-						<text>1</text>
-					</view>
-					<view class="dati-item dati-none">
-						<text>1</text>
+					<view @click="goQuestion(index)" class="dati-item" :class="'dati-' + item.status" v-for="(item, index) in questionDic"
+					 :key="index">
+						<text>{{index+1}}</text>
 					</view>
 				</view>
 				<view class="exam-btn">
@@ -35,92 +37,374 @@
 			</view>
 		</u-popup>
 
-		<view class="time-header">
-			<view class="time-left">
-				<text>剩余时间</text>
+		<view v-if="detail.isEnable=='1'&&detail.isFinish=='0'">
+			<view class="time-header" v-show="detail!=''">
+				<view class="time-left">
+					<text>剩余时间</text>
+				</view>
+				<view class="time-num">
+					<view class="item">
+						<text>{{examTime.hour}}</text>
+					</view>
+					<view class="dot">
+						<text>:</text>
+					</view>
+					<view class="item">
+						<text>{{examTime.min}}</text>
+					</view>
+					<view class="dot">
+						<text>:</text>
+					</view>
+					<view class="item">
+						<text>{{examTime.second}}</text>
+					</view>
+				</view>
+				<view class="time-right">
+					<text class="that-num">{{nowQuestionNum}}</text>
+					<text class="count">/ {{QuestionCount}}</text>
+				</view>
 			</view>
-			<view class="time-num">
-				<view class="item">
-					<text>00</text>
-				</view>
-				<view class="dot">
-					<text>:</text>
-				</view>
-				<view class="item">
-					<text>00</text>
-				</view>
-				<view class="dot">
-					<text>:</text>
-				</view>
-				<view class="item">
-					<text>00</text>
-				</view>
-			</view>
-			<view class="time-right">
-				<text class="that-num">46</text>
-				<text class="count">/ 50</text>
+			<view class="line">
 			</view>
 		</view>
-		<view class="line">
-		</view>
-		<view class="box">
-			<view class="text-header">
-				<text>【多选题】中国特色社会主义进入新时代，意味着（）。</text>
-			</view>
-			<view class="text-option">
-				<text>A.近代以来久经磨难的中华民族迎来了从站起来。</text>
-			</view>
-			<view class="text-option option-action">
-				<text>B.科学社会主义在二十一世纪的中国焕发出强大生机活力。</text>
-			</view>
-			<view class="text-option">
-				<text>C.科学社会主义在二十一世纪的中国焕发出强大生机活力。</text>
-			</view>
-		</view>
+		<uni-transition :mode-class="['slide-right']" :show="showQuestion" :duration="500">
+			<view class="box" v-if="showQuestion">
+				<view class="text-header">
+					<text v-if="question.questionType=='select'">
+						【多选题】{{question.select.question}}
+					</text>
+					<text v-if="question.questionType=='single'">
+						【单选题】{{question.single.question}}
+					</text>
+					<text v-if="question.questionType=='judge'">
+						【是非题】{{question.judge.question}}
+					</text>
+				</view>
+				<view v-if="question.questionType=='select'">
+					<view class="text-option" :class="answer.indexOf('A') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="select" data-option="A" v-if="question.select.optionA!=''" @click="selectOption">
+						<text>A.{{question.select.optionA}}</text>
+					</view>
+					<view class="text-option" :class="answer.indexOf('B') != -1 ? isRight=='1'?'option-action':'option-error' :''"
+					 data-type="select" data-option="B" v-if="question.select.optionB!=''" @click="selectOption">
+						<text>B.{{question.select.optionB}}</text>
+					</view>
+					<view class="text-option" :class="answer.indexOf('C') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="select" data-option="C" v-if="question.select.optionC!=''" @click="selectOption">
+						<text>C.{{question.select.optionC}}</text>
+					</view>
+					<view class="text-option" :class="answer.indexOf('D') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="select" data-option="D" v-if="question.select.optionD!=''" @click="selectOption">
+						<text>C.{{question.select.optionD}}</text>
+					</view>
+				</view>
 
-		<view class="footer">
+				<view v-if="question.questionType=='single'">
+					<view class="text-option" :class="answer.indexOf('A') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="single" data-option="A" v-if="question.single.optionA!=''" @click="selectOption">
+						<text>A.{{question.single.optionA}}</text>
+					</view>
+					<view class="text-option" :class="answer.indexOf('B') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="single" data-option="B" v-if="question.single.optionB!=''" @click="selectOption">
+						<text>B.{{question.single.optionB}}</text>
+					</view>
+					<view class="text-option" :class="answer.indexOf('C') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="single" data-option="C" v-if="question.single.optionC!=''" @click="selectOption">
+						<text>C.{{question.single.optionC}}</text>
+					</view>
+					<view class="text-option" :class="answer.indexOf('D') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="single" data-option="D" v-if="question.single.optionD!=''" @click="selectOption">
+						<text>C.{{question.single.optionD}}</text>
+					</view>
+				</view>
+
+				<view v-if="question.questionType=='judge'">
+					<view class="text-option" data-type="judge" :class="answer.indexOf('1') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-option="1" @click="selectOption">
+						<text>正确。</text>
+					</view>
+					<view class="text-option" :class="answer.indexOf('0') != -1 ? isRight=='1'?'option-action':'option-error':''"
+					 data-type="judge" data-option="0" @click="selectOption">
+						<text>错误。</text>
+					</view>
+				</view>
+
+				<view class="question-answer" v-show="questionAnswer!=''">
+					<text v-if="question.questionType=='judge'">正确答案：{{questionAnswer=='1'?'正确':'错误'}}</text>
+					<text v-else>
+						正确答案：{{questionAnswer}}
+					</text>
+				</view>
+			</view>
+		</uni-transition>
+		
+		<view class="footer" v-show="detail!=''">
 			<view class="footer-content">
 				<view class="footer-left">
 					<view class="item">
 						<view class="suc-icon"></view>
-						<text class="suc-num">18</text>
+						<text class="suc-num">{{rightNum}}</text>
 					</view>
 					<view class="item">
 						<view class="err-icon"></view>
-						<text class="err-num">3</text>
+						<text class="err-num">{{wrongNum}}</text>
 					</view>
 				</view>
 				<view class="footer-right">
-					<view class="right-item">
+					<view class="right-item" @click="preQuestion">
 						<text>上一题</text>
 					</view>
-					<view class="right-item">
+					<view class="right-item" @click="nextQuestion">
 						<text>下一题</text>
 					</view>
 				</view>
 			</view>
 		</view>
+
+		<u-popup v-model="showIdeas" mode="bottom" border-radius="20">
+			<view class="ideas-line">
+			</view>
+			<view class="ideas-content">
+				<text>{{ideas}}</text>
+			</view>
+		</u-popup>
+		<view class="footer-block"></view>
 	</view>
 </template>
 
 <script>
+	import uniTransition from '@/components/uni-transition/uni-transition.vue'
+	import {
+		showModal,
+		Validation
+	} from '@/utils'
 	var _this
 	export default {
+		components: {
+			uniTransition
+		},
 		data() {
 			return {
 				showApp: false,
-				id:0,
-				detail:""
+				id: 0,
+				detail: "",
+				nowQuestionNum: 0,
+				QuestionCount: 0,
+				rightNum: 0,
+				wrongNum: 0,
+				examTime: {
+					hour: '00',
+					min: '00',
+					second: '00'
+				},
+				questions: [],
+				question: '',
+				questionDic: [],
+				answer: [],
+				isRight: '1',
+				questionAnswer: '',
+				showIdeas: false,
+				showQuestion: false,
+				ideas: "",
+				isAnswer: false ,//是否可以继续答题
 			};
 		},
+		watch: {
+			question(val) {
+				// 显示题目
+				setTimeout(function(){
+					_this.showQuestion = true
+					// 获取已答题信息
+					if (val.stuanswerdetail != null) {
+						// 已经提交答题不允许作答
+						_this.isAnswer = false
+						_this.questionAnswer = val.stuanswerdetail.answer
+						_this.answer = val.stuanswerdetail.stuanswer.split("、")
+						_this.isRight = val.stuanswerdetail.isright
+					} else {
+						// 未答题允许作答
+						_this.isAnswer = true
+						_this.answer = [] // 恢复答案暂存
+						_this.questionAnswer = '' // 恢复答案
+						_this.isRight = '1' // 恢复正确样式
+					}
+				}, 300)
+			},
+			async nowQuestionNum(val) {
+				// 刷新题目前初始化
+				_this.showQuestion = false // 获取题目前隐藏就题目
+				_this.isAnswer = false // 不允许答题
+				// 获取下一题信息
+				var question = _this.questions[val - 1]
+				switch (question.questionType) {
+					case "select":
+						await _this.getSelect(question.id)
+						break;
+					case "single":
+						await _this.getSingle(question.id)
+						break;
+					case "judge":
+						await _this.getJudge(question.id)
+						break;
+				}
+			}
+		},
 		methods: {
-			async getExamInfo(){
-				
+			async getQuestion(question) {
+				switch (question.questionType) {
+					case "select":
+						return await _this.getSelect(question.id)
+						break;
+					case "single":
+						return await _this.getSingle(question.id)
+						break;
+					case "judge":
+						return await _this.getJudge(question.id)
+						break;
+				}
+			},
+			goQuestion(index) {
+				this.nowQuestionNum = index + 1
+				this.showApp = false
+			},
+			async selectOption(e) {
+				if (this.detail.isEnable == '1' && this.detail.isFinish == '0' && this.isAnswer == true) {
+					var type = e.currentTarget.dataset.type
+					var option = e.currentTarget.dataset.option
+					var index = this.answer.indexOf(String(option))
+					switch (type) {
+						case 'select':
+							if (index == -1) {
+								this.answer.push(String(option))
+							} else {
+								this.answer.splice(index, 1);
+							}
+							break;
+						case 'single':
+							if (index == -1) {
+								this.answer = []
+								this.answer.push(String(option))
+							} else {
+								this.answer.splice(index, 1);
+							}
+							break;
+						case 'judge':
+							if (index == -1) {
+								this.answer = []
+								this.answer.push(String(option))
+							} else {
+								this.answer.splice(index, 1);
+							}
+							break;
+					}
+				}
+			},
+			async answerQuestion() {
+				if (this.answer.length > 0 && this.detail.isEnable == '1' && this.detail.isFinish == '0' && this.isAnswer == true) {
+					return await this.$api.ExamAnswer({
+						questionId: this.question.id,
+						answer: this.answer
+					}).then(({
+						data
+					}) => {
+						_this.questionAnswer = data.data.answer
+						_this.answer = data.data.stuanswer.split("、")
+						_this.isRight = data.data.isright
+						if (data.data.isright == '1') {
+							_this.rightNum = _this.rightNum + 1
+							_this.questionDic[_this.nowQuestionNum - 1].status = "suc"
+						} else if (data.data.isright == '0') {
+							_this.wrongNum = _this.wrongNum + 1
+							_this.questionDic[_this.nowQuestionNum - 1].status = "err"
+						}
+					}).catch((err)=>{
+						console.log(err)
+					})
+				}
+			},
+			async preQuestion() {
+				var preNum = this.nowQuestionNum - 1
+				if (preNum <= 0) {
+					this.nowQuestionNum = 1
+				} else {
+					this.nowQuestionNum = preNum
+				}
+			},
+			async nextQuestion() {
+				var nextNum = this.nowQuestionNum + 1
+				// 提交本题答案
+				await this.answerQuestion()
+				// 判断是否是最后一题提交
+				if (nextNum > this.questions.length) { // 最后一题处理
+					this.showApp = true
+					return false
+				} else {
+					this.nowQuestionNum = nextNum
+				}
+			},
+			async getSelect(id) {
+				await this.$api.GetExamSelect(this.detail.id, id).then(({
+					data
+				}) => {
+					_this.question = data.data
+				})
+			},
+			async getSingle(id) {
+				await this.$api.GetExamSingle(this.detail.id, id).then(({
+					data
+				}) => {
+					_this.question = data.data
+				})
+			},
+			async getJudge(id) {
+				await this.$api.GetExamJudge(this.detail.id, id).then(({
+					data
+				}) => {
+					_this.question = data.data
+				})
+			},
+			showTime() {
+				var nowtime = new Date(), //获取当前时间
+					endtime = new Date(this.detail.endTime.replace(/-/g, '/')); //定义结束时间
+				var lefttime = endtime.getTime() - nowtime.getTime(), //距离结束时间的毫秒数
+					lefth = Math.floor(lefttime / (1000 * 60 * 60) % 24), //计算小时数
+					leftm = Math.floor(lefttime / (1000 * 60) % 60), //计算分钟数
+					lefts = Math.floor(lefttime / 1000 % 60); //计算秒数
+				this.examTime.hour = this.$utils.addPreZero(lefth);
+				this.examTime.min = this.$utils.addPreZero(leftm);
+				this.examTime.second = this.$utils.addPreZero(lefts);
+			},
+			exitExam() {
+				showModal({
+					title: "提示",
+					content: "退出将无法重新考试",
+					showCancel: true,
+					success: function(res) {
+						if (res.confirm) {
+							uni.reLaunch({
+								url: "/pages/index/index"
+							})
+						}
+					}
+				})
+			},
+			onShowIdeas() {
+				var id = this.question.id
+				var questiontype = this.question.questionType
+				this.$api.GetQuestionIdeas({
+					id,
+					questiontype
+				}).then(({
+					data
+				}) => {
+					this.ideas = data.data
+					this.showIdeas = true
+				})
 			},
 			openapp() {
 				this.showApp = true
 			},
-			closeapp(){
+			closeapp() {
 				this.showApp = false
 			}
 		},
@@ -129,40 +413,106 @@
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('onExamDetail', function(data) {
 				_this.detail = data.detail
-				// _this.getSelects()
+				_this.QuestionCount = data.detail.examquestions.length
+				// 储存题目
+				_this.questions = data.detail.examquestions
+				data.detail.examquestions.forEach((item) => {
+					_this.questionDic.push({
+						"id": item.id,
+						"questionType": item.questionType,
+						"status": 'none'
+					})
+				})
+				if (data.detail.stuanswerdetails.length > 0) {
+					// 计算对题数
+					_this.rightNum = _this.$utils.QuestionAnswerCount(data.detail.stuanswerdetails, '1');
+					// 计算错题数
+					_this.wrongNum = _this.$utils.QuestionAnswerCount(data.detail.stuanswerdetails, '0');
+					// 处理已答题信息
+					data.detail.stuanswerdetails.forEach((answer, aindex) => {
+						_this.questionDic.forEach((item, index) => {
+							if (item.id == answer.questionId) { //存在已经答题
+								var status = answer.isright == '1' ? 'suc' : answer.isright == '0' ? 'err' : 'none'
+								_this.questionDic[index].status = status
+							}
+						})
+					})
+					var lastQuestionNum = _this.questions.length
+					// 获取最后一个答题位置
+					for (var i = 0; i < _this.questionDic.length; i++) {
+						if (_this.questionDic[i].status == 'none') { //存在已经答题
+							lastQuestionNum = i + 1
+							break;
+						}
+					}
+					_this.nowQuestionNum = lastQuestionNum
+				} else {
+					_this.nowQuestionNum = 1
+				}
+				_this.showTime()
+				// 开始考试倒计时
+				setInterval(function() {
+					_this.showTime()
+				}, 1000);
 			})
 		}
 	}
 </script>
 <style lang="scss" scoped>
-	.slot-wrap {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding: 0 40rpx;
-			flex: 1;
-			.exam-exit {
-				font-size: 36rpx;
-				font-family: PingFangSC, PingFangSC-Regular;
-				font-weight: 400;
-				text-align: left;
-				color: #333333;
-				line-height: 48rpx;
-			}
-			.right_app {
-				background: url(../../static/exam_app.svg);
-				background-repeat: no-repeat;
-				background-size: 100%;
-				height: 49rpx;
-				width: 49rpx;
-			}
-			
+	.question-answer {
+		padding: 30rpx;
+
+		text {
+			font-size: 30rpx;
 		}
-	.app-content{
+	}
+
+	.show-ideas {
+		text-align: left;
+		line-height: 48rpx;
+		padding-right: 30rpx;
+
+		text {
+			font-size: 32rpx;
+			font-family: PingFangSC, PingFangSC-Regular;
+			font-weight: 400;
+			color: rgba(61, 127, 255, 1);
+		}
+	}
+
+	.slot-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 40rpx;
+		flex: 1;
+
+		.exam-exit {
+			font-size: 36rpx;
+			font-family: PingFangSC, PingFangSC-Regular;
+			font-weight: 400;
+			text-align: left;
+			color: #333333;
+			line-height: 48rpx;
+		}
+
+		.right_app {
+			background: url(../../static/exam_app.svg);
+			background-repeat: no-repeat;
+			background-size: 100%;
+			height: 49rpx;
+			width: 49rpx;
+		}
+
+	}
+
+	.app-content {
 		margin: 0 40rpx 25rpx 40rpx;
-		.exam-btn{
+
+		.exam-btn {
 			padding: 0rpx 200rpx 0 200rpx;
-			.exam-sumbit{
+
+			.exam-sumbit {
 				height: 88rpx;
 				background: #fff;
 				border-radius: 10rpx;
@@ -170,44 +520,53 @@
 				line-height: 88rpx;
 				color: #2db0fe;
 				text-align: center;
-				
+
 			}
 		}
-		.datilist{
+
+		.datilist {
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-start;
 			padding-left: 10rpx;
-			.dati-suc{
+
+			.dati-suc {
 				background: #2db0fe;
 				color: #fff;
 			}
-			.dati-err{
+
+			.dati-err {
 				background: #ff4545;
 				color: #fff;
 			}
-			.dati-none{
+
+			.dati-none {
 				border: 4rpx solid #2db0fe;
 				color: #2db0fe;
-				text{
+
+				text {
 					line-height: 76rpx !important;
 				}
 			}
-			.dati-item{
+
+			.dati-item {
 				width: 81.66666rpx;
-				height:81.66666rpx;
+				height: 81.66666rpx;
 				margin: 15rpx;
 				border-radius: 100%;
 				text-align: center;
-				text{
+
+				text {
 					font-size: 36rpx;
 					line-height: 81rpx;
 				}
 			}
 		}
-		.app-header{
+
+		.app-header {
 			height: 88rpx;
-			.close-app{
+
+			.close-app {
 				width: 50rpx;
 				height: 50rpx;
 				position: absolute;
@@ -218,12 +577,14 @@
 				top: 18rpx;
 				top: calc(18rpx + env(safe-area-inset-top)) !important;
 			}
-			.exam-title{
+
+			.exam-title {
 				position: relative;
 				line-height: 88rpx;
 				text-align: center;
 				font-size: 32rpx;
-				text{
+
+				text {
 					width: 520rpx;
 					height: 88rpx;
 					font-family: PingFangSC, PingFangSC-Light;
@@ -235,6 +596,7 @@
 			}
 		}
 	}
+
 	.footer {
 		position: fixed;
 		bottom: 0;
@@ -333,7 +695,7 @@
 		}
 	}
 
-	
+
 	.exam-detail {
 		background: #fff;
 		height: 100vh;
@@ -437,11 +799,11 @@
 
 	.text-option {
 		width: 670rpx;
-		height: 160rpx;
 		background: #eeeeee;
 		border-radius: 4rpx;
 		margin-left: 32rpx;
 		margin-top: 30rpx;
+		text-align: left;
 	}
 
 	.text-option text {
@@ -451,12 +813,16 @@
 		color: #888888;
 		line-height: 50rpx;
 		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding-top: 30rpx;
-		padding-left: 30rpx;
-		padding-right: 30rpx;
+		padding: 30rpx;
+		text-align: left;
+	}
 
+	.option-error {
+		background: #f66565 !important;
+
+		text {
+			color: #ffffff !important;
+		}
 	}
 
 	.option-action {

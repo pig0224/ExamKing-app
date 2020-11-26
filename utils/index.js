@@ -307,57 +307,76 @@ export const showTime = (val) => {
 }
 
 // 计算错题率/正确率
-export const QuestionPercent = (data, isRight) => {
-	var count = data.length; // 总题数
-	var fraction = 0;
-	data.forEach((item) => {
-		if (item.isright == isRight) {
-			fraction = fraction + 1;
+export const QuestionPercent = (total, num) => {
+	try{
+		var total= parseFloat(total);
+		var num = parseInt(num);
+		// 计算概率
+		if (isNaN(num) || isNaN(total)) {
+			return "-";
 		}
-	})
-	var total= parseFloat(count);
-	var num = parseInt(fraction);
-	// 计算概率
-	if (isNaN(num) || isNaN(total)) {
-		return "-";
+		return total <= 0 ? "0%" : (Math.round(num / total * 10000) / 100.00)+"%";
+	} catch(err) {
+		console.log(err)
 	}
-	return total <= 0 ? "0%" : (Math.round(num / total * 10000) / 100.00)+"%";
+	
 }
 
 // 计算错题数/对题数
 export const QuestionAnswerCount = (data, isRight) => {
-	var fraction = 0;
-	data.forEach((item) => {
-		if (item.isright == isRight) {
-			fraction = fraction + 1;
-		}
-	})
-	return parseInt(fraction);
+	try{
+		var fraction = 0;
+		data.forEach((item) => {
+			if (item.isright == isRight) {
+				fraction = fraction + 1;
+			}
+		})
+		return parseInt(fraction);
+	}catch(err) {
+		console.log(err)
+	}
 }
 
 // 计算不同类型的错题/对题数量
 export const QuestionTypeCount = (data, questionType, isRight) => {
-	var count = 0;
-	data.forEach((item) => {
-		if (item.isright == isRight && item.questionType == questionType) { 
-			count = count + 1;
-		}
-	})
-	return parseInt(count)
+	try {
+		var count = 0;
+		data.forEach((item) => {
+			if (item.isright == isRight && item.questionType == questionType) { 
+				count = count + 1;
+			}
+		})
+		return parseInt(count)
+	}catch(err) {
+		console.log(err)
+	}
 }
 
 // 分割答案
 export const SplitAnswer = (answer) => {
-	var answerArr = [];
-	if(answer.length>0){
-		answerArr = answer.split('、');
+	try{
+		var answerArr = [];
+		if(answer.length>0){
+			answerArr = answer.split('、');
+		}
+		
+		return answerArr;
+	} catch(err) {
+		console.log(err)
 	}
-	
-	return answerArr;
 }
 
 // 判断是否包含此答案
 export const HasAnswer = (arr, answer)=>{
 	const has = arr.indexOf(answer);
 	return has==-1?false:true;
+}
+
+// 数字前补0
+export const addPreZero = (num) => {
+	var s = "";
+ if(num<10){
+	 s = '0'
+ }
+ return s+num;
 }

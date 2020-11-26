@@ -65,7 +65,7 @@
 				</view>
 
 				<view class="exam-list">
-					<view class="exam-item" v-for="(item, index) in ExamList" :key="index">
+					<view class="exam-item" @click="goExam(item.id)" v-for="(item, index) in ExamList" :key="index">
 						<view class="exambg">
 							<image :src="'../../static/exambg'+(index+1)+'.png'" mode="aspectFill" />
 						</view>
@@ -136,7 +136,7 @@
 			</view>
 
 			<view class="left-list">
-				<view class="item active">
+				<view class="item active" @tap="hideModal()">
 					<view class="item-active"></view>
 					<view class="conetnt">
 						<view class="icon">
@@ -145,13 +145,13 @@
 						<text>主页</text>
 					</view>
 				</view>
-				<view class="item">
+				<view class="item" @click="$utils.href('/pages/all_exam/all_exam')">
 					<view class="item-active"></view>
 					<view class="conetnt">
 						<view class="icon">
 							<image style="width: 45rpx;height: 45rpx;margin-top: 2.5rpx;" src="../../static/chengji.png" mode="widthFix" />
 						</view>
-						<text>我的成绩</text>
+						<text>我的考试</text>
 					</view>
 				</view>
 
@@ -161,7 +161,18 @@
 						<view class="icon">
 							<image style="width: 55rpx;height: 55rpx;margin-top: -1rpx;" src="../../static/notice.png" mode="aspectFil" />
 						</view>
-						<text>成绩通知</text>
+						<text>我的成绩</text>
+					</view>
+				</view>
+
+				<view class="item" @click="$utils.href('/pages/wrongs/wrongs?title=全部错题')">
+					<view class="
+				 item-active"></view>
+					<view class="conetnt">
+						<view class="icon">
+							<image style="width: 55rpx;height: 55rpx;margin-top: -1rpx;" src="../../static/notice.png" mode="aspectFil" />
+						</view>
+						<text>我的错题</text>
 					</view>
 				</view>
 
@@ -219,28 +230,87 @@
 		computed: {
 			...mapState('student', ['StuName']),
 		},
-		async onPullDownRefresh(){
+		async onPullDownRefresh() {
 			await this.init();
 			uni.stopPullDownRefresh();
 		},
 		methods: {
 			...mapActions('student', ['Logout']),
+			goExamResult(item) {
+				uni.navigateTo({
+					url: '/pages/exam_result/exam_result',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: item
+						})
+					}
+				})
+			},
+			goExamDetail(item) {
+				uni.navigateTo({
+					url: '/pages/exam_detail/exam_detail',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: item
+						})
+					}
+				})
+			},
+			goExamStart(item) {
+				uni.navigateTo({
+					url: '/pages/exam_start/exam_start',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: item
+						})
+					}
+				})
+			},
+			async goExam(id) {
+				// 查询考试信息
+				var item = ""
+				await this.$api.GetExamInfo(id).then(({
+					data
+				}) => {
+					item = data.data
+				})
+				if (item.isEnable == '1' && item.isFinish == '1') { // 考试结束
+					this.goExamResult(item)
+				} else if (item.isEnable == '1' && item.isFinish == '0') { //正在考试
+					// 判断是否答过题
+					if (item.stuanswerdetails.length > 0) {
+						// 判断是否已交卷
+						if (item.stuscores.length > 0) {
+							this.goExamResult(item)
+						} else {
+							// 继续答题
+							this.goExamDetail(item)
+						}
+					} else {
+						this.goExamStart(item)
+					}
+				} else if (item.isEnable == '0' && item.isFinish == '0') { // 考试未开始
+					this.goExamStart(item)
+				}
+			},
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 			},
 			hideModal(e) {
 				this.modalName = null
 			},
-			onSearch(){
+			onSearch() {
 				var keyword = this.searchKeyword
 				uni.navigateTo({
-					url:'/pages/search_list/search_list',
-					success:function(res){
-						res.eventChannel.emit('onSearch', { keyword: keyword })
+					url: '/pages/search_list/search_list',
+					success: function(res) {
+						res.eventChannel.emit('onSearch', {
+							keyword: keyword
+						})
 					}
 				})
 			},
-			async init(){
+			async init() {
 				await this.$api.GetWrongAnswerCount().then(({
 					data
 				}) => {
@@ -252,13 +322,17 @@
 					this.WrongAnswerTodayCount = data.data
 				})
 				await this.$api.GetExamNewList({
-					pageindex:1,
-					pagesize:4
-				}).then(({data})=>{
+					pageindex: 1,
+					pagesize: 4
+				}).then(({
+					data
+				}) => {
 					this.ExamList = data.data.items
 				})
-				await this.$api.GetExamScoreOne().then(({data})=>{
-					this.ExamScore = data.data?data.data:''
+				await this.$api.GetExamScoreOne().then(({
+					data
+				}) => {
+					this.ExamScore = data.data ? data.data : ''
 				})
 			}
 		},
@@ -388,6 +462,7 @@
 				color: #ffffff;
 				line-height: 34rpx;
 				margin-left: 10rpx;
+
 				text {
 					font-size: 26rpx;
 					font-family: PingFangSC, PingFangSC-Regular;
@@ -404,7 +479,8 @@
 				position: absolute;
 				right: 20rpx;
 				top: 74rpx;
-				image{
+
+				image {
 					width: 40rpx;
 					height: 42rpx;
 				}

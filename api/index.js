@@ -158,3 +158,23 @@ export const GetExamWaitList = (query) => {
 export const GetExamFinshList = (query) => {
 	return request.Get('exam/exam-finsh-list', query)
 }
+
+// 获取考试多选题
+export const GetExamSelect = (examid, id) => {
+	return request.Get(`exam/select/${examid}/${id}`)
+}
+
+// 获取考试单选题
+export const GetExamSingle = (examid, id) => {
+	return request.Get(`exam/single/${examid}/${id}`)
+}
+
+// 获取考试是非题
+export const GetExamJudge = (examid, id) => {
+	return request.Get(`exam/judge/${examid}/${id}`)
+}
+
+// 答题
+export const ExamAnswer = (data) => {
+	return request.Post('exam/exam-answer', data)
+}

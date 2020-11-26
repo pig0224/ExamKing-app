@@ -1,15 +1,14 @@
 <template>
 	<view>
-		<view class="box">
-
-			<u-navbar title="错题本"></u-navbar>
-			<view class="image-header">
-				<image src="../../static/wrong_bg.png" mode="widthFix"></image>
-			</view>
-
+		<u-navbar title-color="#ffffff" back-icon-color="#ffffff" :border-bottom="false" title="错题本" :background="{background:'linear-gradient(90deg, rgba(28,162,251,1), rgba(2,123,254,1))'}"></u-navbar>
+		<view class="box" v-show="detail!=''">
 			<view class="cuoti-header" v-if="detail!=''">
-				<text class="cuoti-one">{{stuName}}{{$utils.QuestionAnswerCount(detail.stuanswerdetails, '0')}}条错题</text>
-				<text class="cuoti-tow">错题率{{$utils.QuestionPercent(detail.stuanswerdetails, '0')}}</text>
+				<view class="cuoti-one">
+					<text>{{stuName}}{{$utils.QuestionAnswerCount(detail.stuanswerdetails, '0')}}条错题</text>
+				</view>
+				<view class="cuoti-two">
+					<text>错题率{{$utils.QuestionPercent(detail.examquestions.length, detail.stuanswerdetails.length)}}</text>
+				</view>
 			</view>
 
 			<view class="dq">
@@ -31,7 +30,7 @@
 		</view>
 
 		<view class="wrong-list">
-			<view class="wrong-list-item" v-for="(item, index) in select.items" :key="index">
+			<view class="wrong-list-item" v-for="(item, index) in select.items" :key="'select'+index">
 				<view class="exam-title">
 					<text>【多选题】{{item.select.question}}</text>
 				</view>
@@ -65,7 +64,7 @@
 				</view>
 			</view>
 
-			<view class="wrong-list-item" v-for="(item, index) in single.items" :key="index">
+			<view class="wrong-list-item" v-for="(item, index) in single.items" :key="'single'+index">
 				<view class="exam-title">
 					<text>【单选题】{{item.single.question}}</text>
 				</view>
@@ -99,10 +98,9 @@
 				</view>
 			</view>
 
-
-			<view class="wrong-list-item" v-for="(item, index) in judge.items" :key="index">
+			<view class="wrong-list-item" v-for="(item, index) in judge.items" :key="'select'+index">
 				<view class="exam-title">
-					<text>【是非题】{{item.single.question}}</text>
+					<text>【是非题】{{item.judge.question}}</text>
 				</view>
 				<view class="title-line"></view>
 				<view class="select-option">
@@ -119,7 +117,7 @@
 					<text>正确答案：{{item.stuanswerdetail.answer=='1'?'正确':'错误'}}</text>
 				</view>
 				<view class="title-line"></view>
-				<view class="ideas" @click="onShowIdeas(item.select.id, 'judge')">
+				<view class="ideas" @click="onShowIdeas(item.judge.id, 'judge')">
 					<text>查看解析</text>
 				</view>
 			</view>
@@ -132,6 +130,7 @@
 			<view class="ideas-content">
 				<text>{{ideas}}</text>
 			</view>
+			<view class="footer-block"></view>
 		</u-popup>
 		<view class="footer-block">
 		</view>
@@ -271,11 +270,53 @@
 	}
 </script>
 
-<style lang="scss">
-	.image-header {
-		image {
-			height: 292rpx;
-			width: 750rpx;
+<style lang="scss" scoped>
+	.box {
+		background-image: url(../../static/wrong_bg.png);
+		background-repeat: no-repeat;
+		background-size: 750rpx 292rpx;
+		height: 292rpx;
+		position: relative;
+
+		.cuoti-header {
+			height: 200rpx;
+			z-index: 999;
+			padding-left: 60rpx;
+			padding-top: 26rpx;
+			.cuoti-one{
+				text{
+					height: 50rpx;
+					font-size: 36rpx;
+					font-family: PingFangSC, PingFangSC-Regular;
+					font-weight: 400;
+					text-align: left;
+					color: #ffffff;
+					line-height: 50rpx;
+				}
+			}
+			.cuoti-two{
+				padding-top: 10rpx;
+				text{
+					height: 34rpx;
+					font-size: 24rpx;
+					font-family: PingFangSC, PingFangSC-Regular;
+					font-weight: 400;
+					text-align: left;
+					color: #ffffff;
+					line-height: 34rpx;
+				}
+			}
+		}
+
+		.image-header {
+			position: absolute;
+			left: 0;
+			top: 0;
+
+			image {
+				height: 292rpx;
+				width: 750rpx;
+			}
 		}
 	}
 
@@ -298,10 +339,6 @@
 			color: #666666;
 			line-height: 56rpx;
 		}
-	}
-
-	.box {
-		height: 468rpx;
 	}
 
 	.subject {
@@ -348,39 +385,11 @@
 		box-shadow: 0rpx 0rpx 10rpx 0rpx rgba(206, 204, 204, 0.5);
 		margin-left: 60rpx;
 		position: absolute;
-		top: 270rpx;
-	}
-
-	.cuoti-one {
-		position: absolute;
-		top: 150rpx;
-		margin-left: 60rpx;
-		width: 260rpx;
-		height: 50rpx;
-		font-size: 36rpx;
-		font-family: PingFangSC, PingFangSC-Regular;
-		font-weight: 400;
-		text-align: left;
-		color: #ffffff;
-		line-height: 50rpx;
-	}
-
-	.cuoti-tow {
-		position: absolute;
-		top: 200rpx;
-		margin-left: 60rpx;
-		width: 150rpx;
-		height: 34rpx;
-		font-size: 24rpx;
-		font-family: PingFangSC, PingFangSC-Regular;
-		font-weight: 400;
-		text-align: left;
-		color: #ffffff;
-		line-height: 34rpx;
+		top: 144rpx;
 	}
 
 	.wrong-list {
-		padding: 0 60rpx;
+		padding: 30rpx 60rpx;
 
 		.wrong-list-item {
 			width: 630rpx;

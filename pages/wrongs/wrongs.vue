@@ -12,7 +12,7 @@
 				</view>
 				<view class="footer">
 					<view class="rate">
-						<text>共{{item.stuanswerdetails.length}}道题 错题率{{$utils.QuestionPercent(item.stuanswerdetails, '0')}}</text>
+						<text>共{{item.stuanswerdetails.length}}道题 错题率{{$utils.QuestionPercent(item.examquestions.length, item.stuanswerdetails.length)}}</text>
 					</view>
 					<view class="details" @click="goWrongDetail(index)">
 						<text>查看详情</text>

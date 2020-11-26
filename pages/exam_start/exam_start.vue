@@ -1,31 +1,33 @@
 <template>
-	<view class="box">
-
-		<u-navbar title="数学考试"></u-navbar>
+	<view class="box" v-if="detail!=''">
+		<u-navbar :title="detail.examName" title-width="400"></u-navbar>
 		<view class="portrait">
 			<view class="titlel">
-				<image src="../../static/wang.jpg">
-				</image>
+				<image src="../../static/timg.jpg" mode="widthFix"></image>
 				<br>
-				<b>王林锋</b>
+				<b>{{stuName}}</b>
 			</view>
 		</view>
 		<view class="so">
 			<view class="detailed">
-				<p>考试班级：软件1832</p>
-				<p>考试科目：数学</p>
-				<p>考试时间：120分钟</p>
-				<p>考试分数：150分</p>
+				<p>考试课程：{{detail.course.courseName}}</p>
+				<p>所属教师：{{detail.teacher.teacherName}}</p>
+				<p>考试时间：{{$utils.showTime(detail.duration)}}</p>
+				<p>考试总分：{{detail.examScore}}分</p>
 				<view class="tit">
 					<text>
-						考试要求：靠生需在试卷规定处填写自己的姓名、准考证号码和校验码，
-						考生交卷出场时间不得早于每科目考试结束前30分钟。</text>
+						考试要求：考试提交前途禁止退出考试，谨慎答题提交后不可修改。</text>
 				</view>
 			</view>
 		</view>
-		<view class="button">
-			<button>
+		<view class="button" v-if="detail.isEnable=='1' && detail.isFinish=='0'">
+			<button @click="startExam">
 				开始考试
+			</button>
+		</view>
+		<view class="button-disabele" v-if="detail.isEnable=='0' && detail.isFinish=='0'">
+			<button disabled>
+				考试未开始
 			</button>
 		</view>
 		<view class="images">
@@ -35,10 +37,62 @@
 </template>
 
 <script>
+	import {showModal} from '@/utils'
+	import store from '@/store/index.js'
+	var _this
 	export default {
 		data() {
-			return {}
+			return {
+				stuName: store.state.student.StuName,
+				detail: ''
+			}
 		},
+		methods: {
+			goExamDetail() {
+				var item = this.detail
+				uni.navigateTo({
+					url: '/pages/exam_detail/exam_detail',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: item
+						})
+					}
+				})
+			},
+			startExam() {
+				var nowTime = Date.parse(new Date());
+				var startTime = Date.parse(new Date(this.detail.startTime));
+				var endTime = Date.parse(new Date(this.detail.endTime));
+				var delay = 60 * 15; // 超时15分钟后不可以考试
+
+				if (nowTime < startTime) { //考试未开始
+					return
+				} else if ((startTime - nowTime) >= delay) { // 迟到15分钟不允许考试
+					return
+				} else if (nowTime >= endTime) { // 考试结束
+					return
+				}
+				showModal({
+					title: "提示",
+					content: "确定开始考试？",
+					showCancel: true,
+					success: function(res) {
+						if (res.confirm) {
+							// 进入考试页面
+							_this.goExamDetail()
+						}
+					}
+				})
+
+			}
+		},
+		onLoad() {
+			_this = this
+			const eventChannel = this.getOpenerEventChannel()
+			eventChannel.on('onExamDetail', function(data) {
+				_this.detail = data.detail
+			})
+		}
 	}
 </script>
 
@@ -99,6 +153,23 @@
 		display: flex;
 		justify-content: center;
 		margin-top: 40rpx;
+	}
+
+	.button-disabele {
+		width: 750rpx;
+		height: 80rpx;
+		display: flex;
+		justify-content: center;
+		margin-top: 40rpx;
+
+		button {
+			width: 624rpx;
+			height: 80rpx;
+			background-image: #eee;
+			border-radius: 80rpx;
+			color: #797979;
+			font-size: 32rpx;
+		}
 	}
 
 	.button button {

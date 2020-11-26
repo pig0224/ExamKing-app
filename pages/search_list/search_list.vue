@@ -35,13 +35,13 @@
 						<text>{{$utils.showTime(item.duration)}}</text>
 					</view>
 					<view class="item" style="flex: 1;">
-						<view v-if="item.isEnable=='0'&&item.isFinish=='0'" class="none-exam" style="float: right;">
+						<view v-if="item.isEnable=='0'&&item.isFinish=='0'" class="finsh-exam" style="float: right;">
 							<text class="txt">未考试</text>
 						</view>
-						<view class="finsh-exam" v-if="item.isEnable=='1'&&item.isFinish=='1'" style="float: right;">
+						<view class="err-exam" v-if="item.isEnable=='1'&&item.isFinish=='1'" style="float: right;">
 							<text class="txt">已结束</text>
 						</view>
-						<view class="err-exam" v-if="item.isEnable=='1'&&item.isFinish=='0'" style="float: right;">
+						<view class="none-exam" v-if="item.isEnable=='1'&&item.isFinish=='0'" style="float: right;">
 							<text class="txt">考试中</text>
 						</view>
 					</view>
@@ -73,52 +73,59 @@
 			this.search()
 		},
 		methods: {
+			goExamResult(item){
+				uni.navigateTo({
+					url: '/pages/exam_result/exam_result',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: item
+						})
+					}
+				})
+			},
+			goExamDetail(item){
+				uni.navigateTo({
+					url: '/pages/exam_detail/exam_detail',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: item
+						})
+					}
+				})
+			},
+			goExamStart(item){
+				uni.navigateTo({
+					url: '/pages/exam_start/exam_start',
+					success: function(res) {
+						res.eventChannel.emit('onExamDetail', {
+							detail: item
+						})
+					}
+				})
+			},
 			async goExam(id) {
 				// 查询考试信息
 				var item = ""
 				await this.$api.GetExamInfo(id).then(({data})=>{
 					item = data.data
 				})
-				if (item.isFinish == '1') { // 考试结束
-					uni.navigateTo({
-						url: '/pages/exam_result/exam_result',
-						success: function(res) {
-							res.eventChannel.emit('onExamDetail', {
-								detail: item
-							})
-						}
-					})
-				} else if (item.isEnable == '1' && item.isFinish == '1') { //正在考试
+				if (item.isEnable == '1' && item.isFinish == '1') { // 考试结束
+					this.goExamResult(item)
+				} else if (item.isEnable == '1' && item.isFinish == '0') { //正在考试
 					// 判断是否答过题
 					if(item.stuanswerdetails.length>0){
-						// 继续答题
-						uni.navigateTo({
-							url: '/pages/exam_detail/exam_detail',
-							success: function(res) {
-								res.eventChannel.emit('onExamDetail', {
-									detail: item
-								})
-							}
-						})
-					}else{
-						uni.navigateTo({
-							url: '/pages/exam_start/exam_start',
-							success: function(res) {
-								res.eventChannel.emit('onExamDetail', {
-									detail: item
-								})
-							}
-						})
-					}
-				} else if (item.isEnable == '0') { // 考试未开始
-					uni.navigateTo({
-						url: '/pages/exam_start/exam_start',
-						success: function(res) {
-							res.eventChannel.emit('onExamDetail', {
-								detail: item
-							})
+						// 判断是否已交卷
+						if(item.stuscores.length>0){
+							this.goExamResult(item)
+						}else{
+							// 继续答题
+							this.goExamDetail(item)
 						}
-					})
+					}else{
+						this.goExamStart(item)
+					}
+				} else if (item.isEnable == '0' && item.isFinish == '0') { // 考试未开始
+					this.goExamStart(item)
 				}
 			},
 			async search() {

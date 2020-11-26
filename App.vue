@@ -28,11 +28,10 @@
 	}
 </script>
 <style>
-	
 	page {
 		background: #F5F6F7;
 	}
-	
+
 	uni-button::after {
 		border: none;
 	}
@@ -68,6 +67,7 @@
 		background: linear-gradient(90deg, rgba(28, 162, 251, 1), rgba(2, 123, 254, 1));
 		color: #fff;
 	}
+	
 </style>
 <style lang="scss">
 	@import 'plugins/uview-ui/index.scss';
