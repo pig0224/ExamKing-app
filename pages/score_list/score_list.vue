@@ -1,6 +1,10 @@
 <template>
 	<view>
-		<view class="score-list">
+		<view class="search-none" v-if="items.length==0">
+			<view class="search-none-icon">
+			</view>
+		</view>
+		<view class="score-list" v-else>
 			<view class="score-item" @click="goExamResult(item.exam)" v-for="(item, index) in items" :key="index">
 				<view class="left-score">
 					<view class="score-content">
@@ -89,6 +93,23 @@
 </script>
 
 <style lang="scss" scoped>
+	.search-none {
+		margin: 0;
+		padding: 0;
+		width: 100vw;
+		height: 288rpx;
+		display: flex;
+		padding-top: 200rpx;
+		justify-content: center;
+	
+		.search-none-icon {
+			width: 538rpx;
+			height: 288rpx;
+			background-image: url(../../static/search-none.svg);
+			background-repeat: no-repeat;
+			background-size: 538rpx 288rpx;
+		}
+	}
 	.exam-content{
 		display: flex;
 		flex-direction: column;
