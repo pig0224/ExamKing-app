@@ -30,7 +30,7 @@
 							</view>
 							<view class="exam-duration ellipse-line">
 								<view class="time-icon"></view>
-								<text>{{$utils.showTime(item.exam.duration)}}分钟</text>
+								<text>{{$utils.showTime(item.exam.duration)}}</text>
 							</view>
 						</view>
 					</view>
