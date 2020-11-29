@@ -12,7 +12,9 @@
 			<view class="detailed">
 				<p>考试课程：{{detail.course.courseName}}</p>
 				<p>所属教师：{{detail.teacher.teacherName}}</p>
-				<p>考试时间：{{$utils.showTime(detail.duration)}}</p>
+				<p>开始考试：{{detail.startTime}}</p>
+				<p>结束考试：{{detail.endTime}}</p>
+				<p>考试时长：{{$utils.showTime(detail.duration)}}</p>
 				<p>考试总分：{{detail.examScore}}分</p>
 				<view class="tit">
 					<text>
@@ -20,12 +22,12 @@
 				</view>
 			</view>
 		</view>
-		<view class="button" v-if="detail.isEnable=='1' && detail.isFinish=='0'">
+		<view class="button" v-if="isStart">
 			<button @click="startExam">
 				开始考试
 			</button>
 		</view>
-		<view class="button-disabele" v-if="detail.isEnable=='0' && detail.isFinish=='0'">
+		<view class="button-disabele" v-else>
 			<button disabled>
 				考试未开始
 			</button>
@@ -37,14 +39,17 @@
 </template>
 
 <script>
-	import {showModal} from '@/utils'
+	import {
+		showModal
+	} from '@/utils'
 	import store from '@/store/index.js'
 	var _this
 	export default {
 		data() {
 			return {
 				stuName: store.state.student.StuName,
-				detail: ''
+				detail: '',
+				isStart: false
 			}
 		},
 		methods: {
@@ -61,15 +66,27 @@
 			},
 			startExam() {
 				var nowTime = Date.parse(new Date());
-				var startTime = Date.parse(new Date(this.detail.startTime));
-				var endTime = Date.parse(new Date(this.detail.endTime));
+				var startTime = Date.parse(new Date(this.detail.startTime.replace(/-/g, '/')));
+				var endTime = Date.parse(new Date(this.detail.endTime.replace(/-/g, '/')));
 				var delay = 60 * 15; // 超时15分钟后不可以考试
 
 				if (nowTime < startTime) { //考试未开始
+					showModal({
+						title: "提示",
+						content: "考试未开始",
+					})
 					return
 				} else if ((startTime - nowTime) >= delay) { // 迟到15分钟不允许考试
+					showModal({
+						title: "提示",
+						content: "迟到15分钟不允许考试",
+					})
 					return
 				} else if (nowTime >= endTime) { // 考试结束
+					showModal({
+						title: "提示",
+						content: "考试已结束",
+					})
 					return
 				}
 				showModal({
@@ -91,6 +108,8 @@
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('onExamDetail', function(data) {
 				_this.detail = data.detail
+				// 判断是否可以开始考试
+				_this.isStart = _this.$utils.isExam(data.detail.startTime, data.detail.endTime)
 			})
 		}
 	}
