@@ -95,7 +95,7 @@
 
 		<uni-transition :mode-class="['slide-right']" :show="showQuestion">
 			<view class="box" v-if="showQuestion">
-				<view class="text-header" v-show="detail.stuscores.lengt==0">
+				<view class="text-header" v-show="detail.stuscores.length==0">
 					<text v-if="question.questionType=='select'">
 						【多选题】{{question.select.question}}
 					</text>
@@ -305,7 +305,7 @@
 			goQuestion(index) {
 				this.nowQuestionNum = index + 1
 				this.showApp = false
-				
+
 			},
 			async selectOption(e) {
 				if (this.detail.isEnable == '1' && this.detail.isFinish == '0' && this.isAnswer == true) {
@@ -341,7 +341,7 @@
 			},
 			async answerQuestion() {
 				if (this.answer.length > 0 && this.detail.isEnable == '1' && this.detail.isFinish == '0' && this.isAnswer == true &&
-					detail.stuscores.length == 0) {
+					this.detail.stuscores.length == 0) {
 					return await this.$api.ExamAnswer({
 						questionId: this.question.id,
 						answer: this.answer
@@ -377,7 +377,7 @@
 				await this.answerQuestion()
 				// 判断是否是最后一题提交
 				if (nextNum > this.questions.length) { // 最后一题处理
-					if(_this.detail.stuscores.length==0){
+					if (_this.detail.stuscores.length == 0) {
 						this.showApp = true
 					}
 					return false
@@ -417,6 +417,10 @@
 					this.examTime.hour = this.$utils.addPreZero(lefth);
 					this.examTime.min = this.$utils.addPreZero(leftm);
 					this.examTime.second = this.$utils.addPreZero(lefts);
+					// 判断是否考试结束
+					if (lefth == 0 && leftm == 0 && lefts == 0) {
+						_this.submitExam()
+					}
 				} catch (err) {
 					console.log(err)
 				}
@@ -456,55 +460,62 @@
 		onLoad() {
 			_this = this
 			const eventChannel = this.getOpenerEventChannel()
-			eventChannel.on('onExamDetail', function(data) {
-				_this.detail = data.detail
-				_this.QuestionCount = data.detail.examquestions.length
-				// 储存题目
-				_this.questions = data.detail.examquestions
-				data.detail.examquestions.forEach((item) => {
-					_this.questionDic.push({
-						"id": item.id,
-						"questionType": item.questionType,
-						"status": 'none'
-					})
-				})
-				if (data.detail.stuanswerdetails.length > 0) {
-					// 计算对题数
-					_this.rightNum = _this.$utils.QuestionAnswerCount(data.detail.stuanswerdetails, '1');
-					// 计算错题数
-					_this.wrongNum = _this.$utils.QuestionAnswerCount(data.detail.stuanswerdetails, '0');
-					// 处理已答题信息
-					data.detail.stuanswerdetails.forEach((answer, aindex) => {
-						_this.questionDic.forEach((item, index) => {
-							if (item.id == answer.questionId) { //存在已经答题
-								var status = answer.isright == '1' ? 'suc' : answer.isright == '0' ? 'err' : 'none'
-								_this.questionDic[index].status = status
-							}
+			eventChannel.on('onExamDetail', function(d) {
+				var id = d.detail.id
+				_this.$api.GetExamInfo(id).then(({
+					data
+				}) => {
+					// 重新获取考试信息
+					_this.detail = data.data
+					_this.QuestionCount = data.data.examquestions.length
+					// 储存题目
+					_this.questions = data.data.examquestions
+					data.data.examquestions.forEach((item) => {
+						_this.questionDic.push({
+							"id": item.id,
+							"questionType": item.questionType,
+							"status": 'none'
 						})
 					})
-					var lastQuestionNum = _this.questions.length
-					if(_this.detail.stuscores.length==0){
-						// 获取最后一个答题位置
-						for (var i = 0; i < _this.questionDic.length; i++) {
-							if (_this.questionDic[i].status == 'none') { //存在已经答题
-								lastQuestionNum = i + 1
-								break;
+					if (data.data.stuanswerdetails.length > 0) {
+						// 计算对题数
+						_this.rightNum = _this.$utils.QuestionAnswerCount(data.data.stuanswerdetails, '1');
+						// 计算错题数
+						_this.wrongNum = _this.$utils.QuestionAnswerCount(data.data.stuanswerdetails, '0');
+						// 处理已答题信息
+						data.data.stuanswerdetails.forEach((answer, aindex) => {
+							_this.questionDic.forEach((item, index) => {
+								if (item.id == answer.questionId) { //存在已经答题
+									var status = answer.isright == '1' ? 'suc' : answer.isright == '0' ? 'err' : 'none'
+									_this.questionDic[index].status = status
+								}
+							})
+						})
+						var lastQuestionNum = _this.questions.length
+						if (_this.detail.stuscores.length == 0) {
+							// 获取最后一个答题位置
+							for (var i = 0; i < _this.questionDic.length; i++) {
+								if (_this.questionDic[i].status == 'none') { //存在已经答题
+									lastQuestionNum = i + 1
+									break;
+								}
 							}
+						} else {
+							lastQuestionNum = 1
 						}
-					}else{
-						lastQuestionNum = 1
+						_this.nowQuestionNum = lastQuestionNum
+					} else {
+						_this.nowQuestionNum = 1
 					}
-					_this.nowQuestionNum = lastQuestionNum
-				} else {
-					_this.nowQuestionNum = 1
-				}
-				if(_this.detail.stuscores.length==0){
-					_this.showTime()
-					// 开始考试倒计时
-					setInterval(function() {
+					if (_this.detail.stuscores.length == 0) {
 						_this.showTime()
-					}, 1000);
-				}
+						// 开始考试倒计时
+						setInterval(function() {
+							_this.showTime()
+						}, 1000);
+					}
+
+				})
 			})
 		}
 	}
@@ -517,10 +528,10 @@
 		background: rgba(216, 216, 216, 0.6);
 		border-radius: 6rpx;
 	}
-	
+
 	.ideas-content {
 		padding: 0 60rpx 30rpx 60rpx;
-	
+
 		text {
 			font-size: 40rpx;
 			font-family: PingFangSC, PingFangSC-Regular;
@@ -530,14 +541,17 @@
 			line-height: 56rpx;
 		}
 	}
-	.exam-header{
+
+	.exam-header {
 		padding: 40rpx;
 		position: relative;
-		.time-right{
+
+		.time-right {
 			position: absolute;
 			right: 30rpx;
 			bottom: 10rpx;
-			.that-num{
+
+			.that-num {
 				width: 48rpx;
 				height: 56rpx;
 				font-size: 40rpx;
@@ -547,7 +561,8 @@
 				color: #333333;
 				line-height: 56rpx;
 			}
-			.count{
+
+			.count {
 				padding-left: 10rpx;
 				width: 48rpx;
 				height: 40rpx;
@@ -559,9 +574,11 @@
 				line-height: 40rpx;
 			}
 		}
-		.exam-title{
+
+		.exam-title {
 			text-align: left;
-			text{
+
+			text {
 				width: 670rpx;
 				height: 100rpx;
 				font-size: 36rpx;
@@ -573,6 +590,7 @@
 			}
 		}
 	}
+
 	.question-answer {
 		padding: 30rpx;
 

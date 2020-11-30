@@ -387,12 +387,11 @@ export const isExam = (startTime, endTime) => {
 	var startTime = Date.parse(new Date(startTime.replace(/-/g, '/')));
 	var endTime = Date.parse(new Date(endTime.replace(/-/g, '/')));
 	var delay = 60 * 15; // 超时15分钟后不可以考试
-	
 	if (nowTime < startTime) { //考试未开始
 		return false;
 	} else if ((startTime - nowTime) >= delay) { // 迟到15分钟不允许考试
 		return false;
 	} else if (nowTime >= endTime) { // 考试结束
-		return false;
+		return true;
 	}
 }

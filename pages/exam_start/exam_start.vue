@@ -49,7 +49,7 @@
 			return {
 				stuName: store.state.student.StuName,
 				detail: '',
-				isStart: false
+				isStart: true
 			}
 		},
 		methods: {
@@ -69,7 +69,8 @@
 				var startTime = Date.parse(new Date(this.detail.startTime.replace(/-/g, '/')));
 				var endTime = Date.parse(new Date(this.detail.endTime.replace(/-/g, '/')));
 				var delay = 60 * 15; // 超时15分钟后不可以考试
-
+				// console.log(this.detail.endTime);
+				// console.log((nowTime >= endTime))
 				if (nowTime < startTime) { //考试未开始
 					showModal({
 						title: "提示",
@@ -108,8 +109,6 @@
 			const eventChannel = this.getOpenerEventChannel()
 			eventChannel.on('onExamDetail', function(data) {
 				_this.detail = data.detail
-				// 判断是否可以开始考试
-				_this.isStart = _this.$utils.isExam(data.detail.startTime, data.detail.endTime)
 			})
 		}
 	}

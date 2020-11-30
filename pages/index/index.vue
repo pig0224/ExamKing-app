@@ -90,7 +90,7 @@
 					<text class="more" @click="$utils.href('/pages/score_list/score_list')">更多</text>
 				</view>
 
-				<view class="today-chengji" v-if="ExamScore!=''">
+				<view class="today-chengji" v-if="ExamScore!=''" @click="goExamResult(ExamScore.exam)">
 					<view class="today-content">
 						<view><text class="ellipse-2">{{ExamScore.exam.examName}}</text>
 						</view>
