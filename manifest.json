@@ -2,10 +2,26 @@
     "name" : "考试君",
     "appid" : "__UNI__8C211EB",
     "description" : "",
-    "versionName" : "ColorUi for UniApp 2.1.4",
-    "versionCode" : 214,
+    "versionName" : "0.0.1",
+    "versionCode" : 1,
     "transformPx" : false,
     "app-plus" : {
+        "runmode" : "liberate",
+        "splashscreen" : {
+            "autoclose" : false
+        },
+        "safearea" : {
+            "background" : "#CCCCCC",
+            "bottom" : {
+                "offset" : "none|auto"
+            },
+            "left" : {
+                "offset" : "none|auto"
+            },
+            "right" : {
+                "offset" : "none|auto"
+            }
+        },
         /* 5+App特有相关 */
         "modules" : {},
         /* 模块配置 */
@@ -36,11 +52,14 @@
                     "<uses-feature android:name=\"android.hardware.camera\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ]
+                ],
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
             },
             "ios" : {},
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            }
         }
     },
     /* SDK配置 */
