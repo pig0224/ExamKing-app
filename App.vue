@@ -56,7 +56,7 @@
 
 	.header-block {
 		width: 100vw;
-		padding-bottom: env(safe-area-inset-top);
+		padding-top: env(safe-area-inset-top);
 	}
 
 	.white-header {

@@ -18,8 +18,8 @@
 		</u-navbar>
 
 		<u-popup v-model="showApp" mode="top" border-radius="20">
-			<view class="header-block"></view>
 			<view class="app-content">
+				<view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
 				<view class="app-header">
 					<view class="exam-title ellipse-line">
 						{{detail.examName}}
@@ -215,6 +215,7 @@
 				showApp: false,
 				id: 0,
 				detail: "",
+				statusBarHeight: systemInfo.statusBarHeight,
 				nowQuestionNum: 0,
 				QuestionCount: 0,
 				rightNum: 0,
@@ -282,11 +283,11 @@
 					data
 				}) => {
 					var score = data.data
-					uni.redirectTo({
-						url: '/pages/exam_result/exam_result?id=' + _this.detail.id
-					})
 				}).catch((err) => {
 					console.log(err)
+				})
+				uni.redirectTo({
+					url: '/pages/exam_result/exam_result?id=' + _this.detail.id
 				})
 			},
 			async getQuestion(question) {
@@ -521,6 +522,9 @@
 	}
 </script>
 <style lang="scss" scoped>
+	.status-bar{
+		width: 100%;
+	}
 	.ideas-line {
 		margin: 25rpx auto 25rpx auto;
 		width: 200rpx;
