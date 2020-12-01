@@ -63,7 +63,7 @@
 		},
 		async onLoad(e) {
 			_this = this
-			var id = 11
+			var id = e.id
 			this.$api.GetExamScore(id).then(({
 				data
 			}) => {
@@ -81,8 +81,6 @@
 				_this.suc = _this.$utils.QuestionPercent(data.data.examquestions.length, sucNum).split("%")[0].split(".")[0]
 				_this.err = _this.$utils.QuestionAnswerCount(data.data.stuanswerdetails, "0")
 				// 计算用时多少分钟
-				console.log(_this.exam.startTime)
-				console.log(_this.score.createTime)
 				var startTime = new Date(_this.exam.startTime.replace(/-/g, '/'))
 				var paperTime = new Date(_this.score.createTime.replace(/-/g, '/'))
 				var useTime = (paperTime.getTime() - startTime.getTime()) / 60000
