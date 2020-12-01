@@ -34,7 +34,7 @@
 - APP端：https://gitee.com/pig0224/ExamKing-app
 - 后端：https://gitee.com/pig0224/ExamKing
 - 管理员后台：https://gitee.com/pig0224/ExamKing-Admin
-- 教师后台：https://gitee.com/pig0224/examking-teacher
+- 教师后台：https://gitee.com/pig0224/ExamKing-Teacher
 
 ## 🍿 运行
 > 将config目录内的接口地址改成自己再运行即可
