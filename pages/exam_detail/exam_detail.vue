@@ -19,13 +19,14 @@
 
 		<u-popup v-model="showApp" mode="top" border-radius="20">
 			<view class="app-content">
-				<view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
-				<view class="app-header">
-					<view class="exam-title ellipse-line">
-						{{detail.examName}}
+				<u-navbar title="" :is-back="false" :border-bottom="false">
+					<view class="app-header">
+						<view class="exam-title ellipse-line" style="text-align: center;">
+							{{detail.examName}}
+						</view>
+						<view class="close-app" @click="closeapp"></view>
 					</view>
-					<view class="close-app" @click="closeapp"></view>
-				</view>
+				</u-navbar>
 				<view class="datilist">
 					<view @click="goQuestion(index)" class="dati-item" :class="'dati-' + item.status" v-for="(item, index) in questionDic"
 					 :key="index">
@@ -215,7 +216,6 @@
 				showApp: false,
 				id: 0,
 				detail: "",
-				statusBarHeight: systemInfo.statusBarHeight,
 				nowQuestionNum: 0,
 				QuestionCount: 0,
 				rightNum: 0,
@@ -522,9 +522,7 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.status-bar{
-		width: 100%;
-	}
+	
 	.ideas-line {
 		margin: 25rpx auto 25rpx auto;
 		width: 200rpx;
@@ -701,7 +699,10 @@
 
 		.app-header {
 			height: 88rpx;
-
+			display: flex;
+			width: 100vw;
+			padding-left: 60rpx;
+			padding-right: 120rpx;
 			.close-app {
 				width: 50rpx;
 				height: 50rpx;
@@ -719,7 +720,7 @@
 				line-height: 88rpx;
 				text-align: center;
 				font-size: 32rpx;
-
+				flex: 1;
 				text {
 					width: 520rpx;
 					height: 88rpx;
