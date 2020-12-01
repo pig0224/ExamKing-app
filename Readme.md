@@ -11,7 +11,7 @@
 [![fork](https://gitee.com/pig0224/ExamKing-app/badge/fork.svg?theme=gvp)](https://gitee.com/pig0224/ExamKing-app/members) 
 [![GitHub stars](https://img.shields.io/github/stars/pig0224/ExamKing-app?logo=github)](https://github.com/pig0224/ExamKing-app/stargazers) 
 [![GitHub forks](https://img.shields.io/github/forks/pig0224/ExamKing-app?logo=github)](https://github.com/pig0224/ExamKing-app/network) 
-[![GitHub license](https://img.shields.io/github/license/pig0224/ExamKing-app)](https://github.com/MonkSoul/Furion/blob/main/LICENSE) 
+[![GitHub license](https://img.shields.io/github/license/pig0224/ExamKing-app)](https://gitee.com/pig0224/ExamKing-app/blob/master/LICENSE) 
 
 </div>
 
@@ -34,7 +34,7 @@
 - APP端：https://gitee.com/pig0224/ExamKing-app
 - 后端：https://gitee.com/pig0224/ExamKing
 - 管理员后台：https://gitee.com/pig0224/ExamKing-Admin
-- 教师后台：https://gitee.com/pig0224/examking-teacher
+- 教师后台：https://gitee.com/pig0224/ExamKing-Teacher
 
 ## 🍿 运行
 > 将config目录内的接口地址改成自己再运行即可
