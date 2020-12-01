@@ -27,7 +27,7 @@
 
       <wButton class="wbutton"
                text="重置密码"
-							 bgColor="#9237e3"
+							 bgColor="#2b7ce8"
                :rotate="isRotate"
                @click.native="startRePass()"></wButton>
 

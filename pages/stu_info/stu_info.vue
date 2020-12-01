@@ -61,7 +61,7 @@
 			</view>
 
 
-			<wButton class="wbutton" text="修 改" bgColor="#9237e3" :rotate="isRotate" @click.native="startREdit()"></wButton>
+			<wButton class="wbutton" text="修 改" bgColor="#2b7ce8" :rotate="isRotate" @click.native="startREdit()"></wButton>
 
 		</view>
 	</view>

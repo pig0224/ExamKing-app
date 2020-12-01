@@ -10,7 +10,7 @@
 				<wInput v-model="studentNo" type="text" maxlength="11" placeholder="学号"></wInput>
 				<wInput v-model="password" type="password" maxlength="11" placeholder="密码"></wInput>
 			</view>
-			<wButton class="wbutton" text="登 录" bgColor="#9237e3" :rotate="isRotate" @click="startLogin"></wButton>
+			<wButton class="wbutton" text="登 录" bgColor="#2b7ce8" :rotate="isRotate" @click="startLogin"></wButton>
 
 			<!-- 底部信息 -->
 			<view class="footer">

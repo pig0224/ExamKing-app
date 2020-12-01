@@ -20,7 +20,7 @@
 				<wInput v-model="IdCard" type="text" placeholder="身份证号码"></wInput>
 			</view>
 
-			<wButton class="wbutton" bgColor="#9237e3" text="注 册" :rotate="isRotate" @click.native="startReg()"></wButton>
+			<wButton class="wbutton" bgColor="#2b7ce8" text="注 册" :rotate="isRotate" @click.native="startReg()"></wButton>
 
 		</view>
 	</view>
